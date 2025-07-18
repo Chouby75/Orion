@@ -6,14 +6,24 @@
   flex-direction: column;
 }
 
+.logo {
+  width: 90%;
+  max-width: 600px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
 .button-center {
   display: flex;
-  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
 .register-button {
   width: 200px;
   height: 50px;
+  margin: 20px;
   border-radius: 10px;
   border: 1px solid black;
 }

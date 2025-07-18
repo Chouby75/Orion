@@ -3,6 +3,7 @@ import { Location } from '@angular/common'; // N'oublie pas d'importer ça
 import { OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service'; // Assurez-vous que le chemin est correct
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private location: Location,
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   loginForm!: FormGroup;
@@ -36,6 +38,8 @@ export class LoginComponent implements OnInit {
       this.login = this.authService.login(credentials).subscribe(
         (response) => {
           console.log('Login successful', response);
+          localStorage.setItem('token', response.token);
+          this.router.navigate(['/feed']);
         },
         (error) => {
           console.error('Login failed', error);

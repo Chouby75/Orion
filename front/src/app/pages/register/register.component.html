@@ -8,13 +8,22 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
     <div class="header-section">
-      <h1 class="page-title">Inscription</h1>
+      <h1 class="page-title">S'inscrire</h1>
     </div>
 
-    <form class="registration-form">
+    <form
+      [formGroup]="RegisterForm"
+      (ngSubmit)="onSubmit()"
+      class="registration-form"
+    >
       <mat-form-field appearance="outline">
         <mat-label>Nom d'utilisateur</mat-label>
-        <input matInput placeholder="Ex: JohnDoe" required />
+        <input
+          matInput
+          placeholder="Ex: JohnDoe"
+          required
+          formControlName="username"
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -24,15 +33,18 @@
           type="email"
           placeholder="Ex: JohnDoe@gmail.com"
           required
+          formControlName="email"
         />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Mot de passe</mat-label>
-        <input matInput type="password" required />
+        <input matInput type="password" required formControlName="password" />
       </mat-form-field>
 
-      <button mat-raised-button class="register-button">S'inscrire</button>
+      <button mat-raised-button class="register-button" type="submit">
+        S'inscrire
+      </button>
     </form>
   </div>
 </div>

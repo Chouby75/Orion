@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.openclassrooms.mddapi.dto.UserInputDto;
-import com.openclassrooms.mddapi.dto.MessageToReturn;
+import com.openclassrooms.mddapi.dto.tokenDto;
 import com.openclassrooms.mddapi.data.services.UserService;
 import com.openclassrooms.mddapi.security.services.JWTService;
 
@@ -23,28 +23,28 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<MessageToReturn> registerUser(@RequestBody UserInputDto userInput) {
+    public ResponseEntity<tokenDto> registerUser(@RequestBody UserInputDto userInput) {
         if (userInput.getUsername() == null || userInput.getEmail() == null || userInput.getPassword() == null) {
-            return ResponseEntity.badRequest().body(new MessageToReturn("Username, email, and password are required"));
+            return ResponseEntity.badRequest().body(new tokenDto("Username, email, and password are required"));
         }
-        MessageToReturn registerUser = userService.registerUser(userInput);
-        if (registerUser.getMessage().equals("User registered successfully")) {
+        tokenDto registerUser = userService.registerUser(userInput);
+        if (registerUser.getToken().equals("User registered successfully")) {
             String token = jwtService.generateToken(userInput.getUsername());
-            return ResponseEntity.ok(new MessageToReturn(token));
+            return ResponseEntity.ok(new tokenDto(token));
         } else {
             return ResponseEntity.status(400).body(registerUser);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MessageToReturn> loginUser(@RequestBody UserInputDto userInput) {
+    public ResponseEntity<tokenDto> loginUser(@RequestBody UserInputDto userInput) {
         if (userInput.getUsername() == null || userInput.getPassword() == null) {
-            return ResponseEntity.badRequest().body(new MessageToReturn("Username and password are required"));
+            return ResponseEntity.badRequest().body(new tokenDto("Username/Email and password are required"));
         }
-        MessageToReturn loginUser = userService.loginUser(userInput);
-        if (loginUser.getMessage().equals("Login successful")) {
+        tokenDto loginUser = userService.loginUser(userInput);
+        if (loginUser.getToken().equals("Login successful")) {
             String token = jwtService.generateToken(userInput.getUsername());
-            return ResponseEntity.ok(new MessageToReturn(token));
+            return ResponseEntity.ok(new tokenDto(token));
         } else {
             return ResponseEntity.status(400).body(loginUser);
         }

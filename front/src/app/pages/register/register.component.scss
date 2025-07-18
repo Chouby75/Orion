@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 100px;
+  padding: 10%;
   background-color: white;
 }
 
@@ -37,7 +37,7 @@
 
 .arrow-back {
   position: absolute;
-  left: 50px;
+  left: 30px;
   top: 250px;
   z-index: 1000;
   transform: scale(2);
@@ -54,14 +54,15 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  width: 40%;
+  width: 100%;
   max-width: 500px;
 }
 
 .register-button {
   padding: 10px 0;
   font-size: 1.1em;
-  width: 30%;
+  width: 35%;
+  min-width: 110px;
   background-color: #7550ec;
   color: white;
   margin: auto;

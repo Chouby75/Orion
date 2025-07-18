@@ -2,7 +2,7 @@ package com.openclassrooms.mddapi.data.services;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mddapi.data.entity.UserEntity;
-import com.openclassrooms.mddapi.dto.MessageToReturn;
+import com.openclassrooms.mddapi.dto.tokenDto;
 import com.openclassrooms.mddapi.dto.UserInputDto;
 import com.openclassrooms.mddapi.data.repo.UserRepo;
 
@@ -21,11 +21,11 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public MessageToReturn registerUser(UserInputDto user) {
+    public tokenDto registerUser(UserInputDto user) {
         // Check if the user already exists
         Optional<UserEntity> existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser.isPresent()) {
-            return new MessageToReturn("Username already exists");
+            return new tokenDto("Username already exists");
         }
 
         UserEntity newUser = new UserEntity();
@@ -35,18 +35,18 @@ public class UserService {
         userRepository.save(newUser);
 
         if (newUser.getId() != null) {
-            return new MessageToReturn("User registered successfully");
+            return new tokenDto("User registered successfully");
         } else {
-            return new MessageToReturn("Error registering user");
+            return new tokenDto("Error registering user");
         }
     }
 
-    public MessageToReturn loginUser(UserInputDto user) {
+    public tokenDto loginUser(UserInputDto user) {
         Optional<UserEntity> existingUser = userRepository.findByUsername(user.getUsername());
         if (!existingUser.isPresent() || !passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
-            return new MessageToReturn("Invalid username or password");
+            return new tokenDto("Invalid username or password");
         }
 
-        return new MessageToReturn("Login successful");
+        return new tokenDto("Login successful");
     }
 }
