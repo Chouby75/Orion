@@ -1,17 +1,19 @@
 package com.openclassrooms.mddapi.dto;
 
+import java.util.List;
+
 public class PostDto {
 
     private String title;
     private String content;
     private String author;
     private String createdAt;
-    private CommentDto[] comments;
+    private List<CommentDto> comments;
 
     public PostDto() {
     }
 
-    public PostDto(String title, String content, String author, String createdAt, CommentDto[] comments) {
+    public PostDto(String title, String content, String author, String createdAt, List<CommentDto> comments) {
         this.title = title;
         this.content = content;
         this.author = author;
@@ -51,11 +53,11 @@ public class PostDto {
         this.createdAt = createdAt;
     }
 
-    public CommentDto[] getComments() {
+    public List<CommentDto> getComments() {
         return comments;
     }
 
-    public void setComments(CommentDto[] comments) {
+    public void setComments(List<CommentDto> comments) {
         this.comments = comments;
     }
 

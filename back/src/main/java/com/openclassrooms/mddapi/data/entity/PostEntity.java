@@ -1,16 +1,26 @@
 package com.openclassrooms.mddapi.data.entity;
 import com.openclassrooms.mddapi.dto.CommentDto;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import com.openclassrooms.mddapi.mappers.PostMapper;
 
 @Entity
 @Table(name = "posts")
 public class PostEntity {
 
+    @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,13 +40,14 @@ public class PostEntity {
     @Column(name = "created_at", updatable = false)
     private String createdAt;
 
-    @Column(name = "comments")
-    private CommentDto[] comments;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) // C'est une vraie relation JPA maintenant !
+    @JoinColumn(name = "post_id") // Clé étrangère dans la table des commentaires
+    private List<CommentEntity> comments = new ArrayList<>(); // Initialisation !
 
     public PostEntity() {
     }
 
-    public PostEntity(Long id, String title, String content, String author, String createdAt, CommentDto[] comments, String[] topics) {
+   public PostEntity(Long id, String title, String content, String author, String createdAt, List<CommentEntity> comments, String[] topics) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -98,12 +109,14 @@ public class PostEntity {
         this.createdAt = createdAt;
     }
 
-    public CommentDto[] getComments() {
-        return comments;
+    public List<CommentDto> getComments() {
+        return comments.stream()
+                   .map(PostMapper::CommenttoDto) // ou .map(comment -> toDto(comment))
+                   .collect(Collectors.toList());
     }
 
-    public void setComments(CommentDto[] comments) {
-        this.comments = comments;
+    public void setComments(CommentEntity comments) {
+        this.comments.add(comments);
     }
 
     

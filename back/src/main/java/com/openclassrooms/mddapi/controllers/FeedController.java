@@ -3,9 +3,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.mddapi.dto.PostDto;
+import com.openclassrooms.mddapi.data.services.PostService;
+import com.openclassrooms.mddapi.dto.MessageToReturn;
+
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,11 +19,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/feed")
 @RestController
 public class FeedController {
+
+    private final PostService postService;
+
+    public FeedController(PostService postService){
+        this.postService = postService;
+    }
     
     @PostMapping()
-    public String createPost(@RequestBody String entity) {
-        
-        return "Post created successfully";
+    public MessageToReturn createPost(@RequestBody PostDto entity) {
+        Boolean result = postService.createPost(entity);
+
+        MessageToReturn response = new MessageToReturn(null);
+
+        if(result){
+            response.setMessage("Post successfully created");
+        } else {
+            response.setMessage("Post encounter a problem when create");
+        }
+
+        return response;
     }
 
     @PostMapping("/comment")
@@ -28,13 +47,18 @@ public class FeedController {
     }
 
     @GetMapping()
-    public PostDto[] getFeed(@RequestParam String param) {
-        return new PostDto[0];
+    public PostDto[] getFeed() {
+        PostDto[] posts = postService.getFeed();
+        return posts;
     }
 
     @GetMapping("/{postId}")
-    public PostDto getPost(@RequestParam String title) {
-        return new PostDto();
+    public PostDto getPost(@RequestParam Long id) {
+        if (id ==null) {
+            return null;
+        }
+        PostDto postToReturn = postService.getPostById(id);
+        return postToReturn;
     }
 
 

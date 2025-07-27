@@ -2,8 +2,9 @@ package com.openclassrooms.mddapi.data.services;
 import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.data.repo.PostRepo;
 import com.openclassrooms.mddapi.data.entity.PostEntity;
-
 import com.openclassrooms.mddapi.dto.PostDto;
+import com.openclassrooms.mddapi.mappers.PostMapper;
+
 import java.util.stream.StreamSupport;
 
 @Service
@@ -15,16 +16,24 @@ public class PostService {
         this.postRepo = postRepo;
     }
     
-    public String createPost(PostDto post) {
-        // Convert PostDto to PostEntity
+    public Boolean createPost(PostDto post) {
+
+        if(post.getTitle() == null || post.getAuthor() == null){
+            return false;
+        }
+
         PostEntity postEntity = new PostEntity();
-        postEntity.setTitle(post.getTitle());
-        postEntity.setContent(post.getContent());
-        postEntity.setAuthor(post.getAuthor());
-        postEntity.setComments(post.getComments());
-        return "Post created successfully";
+            postEntity.setTitle(post.getTitle());
+            postEntity.setContent(post.getContent());
+            postEntity.setAuthor(post.getAuthor());
+
+            PostEntity save = postRepo.save(postEntity);
+            
+        return save.getId() != null;
     }
-        public PostDto[] getFeed() {
+
+    public PostDto[] getFeed() {
+
         PostDto[] posts = StreamSupport.stream(this.postRepo.findAll().spliterator(), false)
                 .map(postEntity -> new PostDto(
                         postEntity.getTitle(),
@@ -34,6 +43,24 @@ public class PostService {
                         postEntity.getComments()))
                 .toArray(PostDto[]::new);
         return posts;
-        }
+    }
+// FAIRE UN COMMENT ENTITY AVEC UNE RELATION
+    // public Boolean postComment(Long id, CommentDto comment) {
+    //     Optional<PostEntity> postOptional = postRepo.findById(id);
+    //     PostEntity post = postOptional.get();
+    //     CommentDto[] commentCopy = post.getComments();
+    //     // commentCopy.add(comment);
+    //     // PostEntity postCommented = post.get().setComments(comment);
+        
+
+    //     return true;
+    // }
+
+    public PostDto getPostById(Long id){
+        PostEntity postOptional = postRepo.findById(id).get();
+        PostDto postDtoById = PostMapper.mapToDto(postOptional);
+        
+        return postDtoById;
+    }
 
 }
