@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.data.entity;
 import com.openclassrooms.mddapi.dto.CommentDto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import com.openclassrooms.mddapi.mappers.PostMapper;
 
@@ -38,7 +40,7 @@ public class PostEntity {
     private String author;
 
     @Column(name = "created_at", updatable = false)
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) // C'est une vraie relation JPA maintenant !
     @JoinColumn(name = "post_id") // Clé étrangère dans la table des commentaires
@@ -47,7 +49,7 @@ public class PostEntity {
     public PostEntity() {
     }
 
-   public PostEntity(Long id, String title, String content, String author, String createdAt, List<CommentEntity> comments, String[] topics) {
+   public PostEntity(Long id, String title, String content, String author, LocalDateTime createdAt, List<CommentEntity> comments, String[] topics) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -57,8 +59,9 @@ public class PostEntity {
         this.topics = topics;
     }
 
+    @PrePersist
     public void onCreate() {
-        this.createdAt = java.time.LocalDateTime.now().toString();
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -101,11 +104,11 @@ public class PostEntity {
         this.author = author;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

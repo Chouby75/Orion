@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -53,11 +54,11 @@ public class FeedController {
     }
 
     @GetMapping("/{postId}")
-    public PostDto getPost(@RequestParam Long id) {
-        if (id ==null) {
+    public PostDto getPost(@PathVariable  Long postId) {
+        if (postId ==null) {
             return null;
         }
-        PostDto postToReturn = postService.getPostById(id);
+        PostDto postToReturn = postService.getPostById(postId);
         return postToReturn;
     }
 

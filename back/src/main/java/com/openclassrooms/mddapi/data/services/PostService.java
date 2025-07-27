@@ -2,9 +2,12 @@ package com.openclassrooms.mddapi.data.services;
 import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.data.repo.PostRepo;
 import com.openclassrooms.mddapi.data.entity.PostEntity;
+import com.openclassrooms.mddapi.dto.CommentDto;
 import com.openclassrooms.mddapi.dto.PostDto;
 import com.openclassrooms.mddapi.mappers.PostMapper;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -48,9 +51,8 @@ public class PostService {
     // public Boolean postComment(Long id, CommentDto comment) {
     //     Optional<PostEntity> postOptional = postRepo.findById(id);
     //     PostEntity post = postOptional.get();
-    //     CommentDto[] commentCopy = post.getComments();
-    //     // commentCopy.add(comment);
-    //     // PostEntity postCommented = post.get().setComments(comment);
+    //     List<CommentDto> commentCopy = post.getComments();
+    //     PostEntity postCommented = post.setComments(comment);
         
 
     //     return true;
