@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.data.services;
 import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.data.repo.PostRepo;
+import com.openclassrooms.mddapi.data.entity.CommentEntity;
 import com.openclassrooms.mddapi.data.entity.PostEntity;
 import com.openclassrooms.mddapi.dto.CommentDto;
 import com.openclassrooms.mddapi.dto.PostDto;
@@ -8,6 +9,8 @@ import com.openclassrooms.mddapi.mappers.PostMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -43,20 +46,31 @@ public class PostService {
                         postEntity.getContent(),
                         postEntity.getAuthor(),
                         postEntity.getCreatedAt(),
-                        postEntity.getComments()))
+                        postEntity.getComments().stream()
+                                .map(PostMapper::CommenttoDto)
+                                .collect(Collectors.toList())))
                 .toArray(PostDto[]::new);
         return posts;
     }
-// FAIRE UN COMMENT ENTITY AVEC UNE RELATION
-    // public Boolean postComment(Long id, CommentDto comment) {
-    //     Optional<PostEntity> postOptional = postRepo.findById(id);
-    //     PostEntity post = postOptional.get();
-    //     List<CommentDto> commentCopy = post.getComments();
-    //     PostEntity postCommented = post.setComments(comment);
-        
 
-    //     return true;
-    // }
+    public Boolean postComment(Long id, CommentDto comment) {
+    try {
+        PostEntity post = postRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post non trouvé !"));
+        
+        CommentEntity newComment = new CommentEntity();
+        newComment.setContent(comment.getContent());
+        newComment.setAuthor(comment.getAuthor());
+
+        post.addComment(newComment);
+        
+        PostEntity postSaved = postRepo.save(post);
+        return true;
+
+    } catch (Exception e) {
+        return false;
+    }
+}
 
     public PostDto getPostById(Long id){
         PostEntity postOptional = postRepo.findById(id).get();

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,8 +20,9 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long post_id;
+    @ManyToOne 
+    @JoinColumn(name = "post_id", nullable = false)
+    private PostEntity post;
 
     @Column(name = "author")
     private String author;
@@ -33,12 +36,12 @@ public class CommentEntity {
     public CommentEntity() {
     }
 
-    public CommentEntity(Long id, String content, String author, Date createdAt, Long post_id) {
+    public CommentEntity(Long id, String content, String author, Date createdAt, PostEntity post) {
         this.id = id;
         this.content = content;
         this.author = author;
         this.createdAt = createdAt;
-        this.post_id = post_id;
+        this.post = post;
     }
 
     public Long getId() {
@@ -49,12 +52,12 @@ public class CommentEntity {
         this.id = id;
     }
 
-    public Long getPost_id() {
-        return post_id;
+    public PostEntity getPost() {
+        return post;
     }
 
-    public void setPost_id(Long post_id) {
-        this.post_id = post_id;
+    public void setPost(PostEntity post) {
+        this.post = post;
     }
 
     public String getAuthor() {
@@ -80,5 +83,4 @@ public class CommentEntity {
     public void setContent(String content) {
         this.content = content;
     }
-    
 }

@@ -3,16 +3,21 @@ import com.openclassrooms.mddapi.dto.CommentDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -30,9 +35,14 @@ public class PostEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "topics")
-    private String[] topics;
-
+    @ManyToMany
+    @JoinTable(
+        name = "post_topics",
+        joinColumns = @JoinColumn(name = "post_id"),
+        inverseJoinColumns = @JoinColumn(name = "topic_id")
+    )
+    private Set<TopicsEntity> topics = new HashSet<>();
+    
     @Column(name = "content")
     private String content;
 
@@ -42,14 +52,18 @@ public class PostEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) // C'est une vraie relation JPA maintenant !
-    @JoinColumn(name = "post_id") // Clé étrangère dans la table des commentaires
-    private List<CommentEntity> comments = new ArrayList<>(); // Initialisation !
+    @OneToMany(
+        mappedBy = "post",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,
+        fetch = FetchType.EAGER
+    )
+    private List<CommentEntity> comments = new ArrayList<>();
 
     public PostEntity() {
     }
 
-   public PostEntity(Long id, String title, String content, String author, LocalDateTime createdAt, List<CommentEntity> comments, String[] topics) {
+   public PostEntity(Long id, String title, String content, String author, LocalDateTime createdAt, List<CommentEntity> comments, Set<TopicsEntity> topics) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -80,12 +94,20 @@ public class PostEntity {
         this.title = title;
     }
 
-    public String[] getTopics() {
-        return topics;
+    public Set<TopicsEntity> getTopics() {
+    return topics;
     }
 
-    public void setTopics(String[] topics) {
+    public void setTopics(Set<TopicsEntity> topics) {
         this.topics = topics;
+    }
+
+    public void addTopic(TopicsEntity topic) {
+    this.topics.add(topic);
+    }
+
+    public void removeTopic(TopicsEntity topic) {
+        this.topics.remove(topic);
     }
 
     public String getContent() {
@@ -112,16 +134,13 @@ public class PostEntity {
         this.createdAt = createdAt;
     }
 
-    public List<CommentDto> getComments() {
-        return comments.stream()
-                   .map(PostMapper::CommenttoDto) // ou .map(comment -> toDto(comment))
-                   .collect(Collectors.toList());
+   public List<CommentEntity> getComments() {
+    return comments;
+}
+
+    public void addComment(CommentEntity comment) {
+        this.comments.add(comment);
+        comment.setPost(this);
     }
 
-    public void setComments(CommentEntity comments) {
-        this.comments.add(comments);
-    }
-
-    
-    
 }

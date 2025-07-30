@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.mddapi.dto.PostDto;
 import com.openclassrooms.mddapi.data.services.PostService;
+import com.openclassrooms.mddapi.dto.CommentDto;
 import com.openclassrooms.mddapi.dto.MessageToReturn;
 
 
@@ -12,10 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
-
 
 @RequestMapping("/feed")
 @RestController
@@ -42,9 +39,19 @@ public class FeedController {
         return response;
     }
 
-    @PostMapping("/comment")
-    public String createComment(@RequestBody String entity) {
-        return "Comment created successfully";
+    @PostMapping("/{postId}/comment")
+    public MessageToReturn createComment(@PathVariable Long postId, @RequestBody CommentDto comment) {
+        Boolean result = postService.postComment(postId, comment);
+
+        MessageToReturn response = new MessageToReturn(null);
+
+        if(result){
+            response.setMessage("Post successfully commented");
+        } else {
+            response.setMessage("Post encounter a problem when commented");
+        }
+
+        return response;
     }
 
     @GetMapping()
