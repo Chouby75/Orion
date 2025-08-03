@@ -24,7 +24,7 @@ public class PostService {
     
     public Boolean createPost(PostDto post) {
 
-        if(post.getTitle() == null || post.getAuthor() == null){
+        if(post.getTitle() == null){
             return false;
         }
 

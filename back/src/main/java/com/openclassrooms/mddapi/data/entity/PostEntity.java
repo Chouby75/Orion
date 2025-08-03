@@ -1,12 +1,10 @@
 package com.openclassrooms.mddapi.data.entity;
-import com.openclassrooms.mddapi.dto.CommentDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,7 +19,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import com.openclassrooms.mddapi.mappers.PostMapper;
 
 @Entity
 @Table(name = "posts")

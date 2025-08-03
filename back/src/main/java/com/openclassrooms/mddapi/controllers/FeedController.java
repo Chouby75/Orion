@@ -10,7 +10,7 @@ import com.openclassrooms.mddapi.dto.MessageToReturn;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -25,7 +25,12 @@ public class FeedController {
     }
     
     @PostMapping()
-    public MessageToReturn createPost(@RequestBody PostDto entity) {
+    public MessageToReturn createPost(@RequestBody PostDto entity, Authentication authentication) {
+        String username = authentication.getName();
+        if (username == null) {
+            return new MessageToReturn("User not authenticated or author not specified");
+        }
+        entity.setAuthor(username);
         Boolean result = postService.createPost(entity);
 
         MessageToReturn response = new MessageToReturn(null);
@@ -40,7 +45,12 @@ public class FeedController {
     }
 
     @PostMapping("/{postId}/comment")
-    public MessageToReturn createComment(@PathVariable Long postId, @RequestBody CommentDto comment) {
+    public MessageToReturn createComment(@PathVariable Long postId, @RequestBody CommentDto comment, Authentication authentication) {
+        String username = authentication.getName();
+        if (username == null) {
+            return new MessageToReturn("User not authenticated or author not specified");
+        }
+        comment.setAuthor(username);
         Boolean result = postService.postComment(postId, comment);
 
         MessageToReturn response = new MessageToReturn(null);
