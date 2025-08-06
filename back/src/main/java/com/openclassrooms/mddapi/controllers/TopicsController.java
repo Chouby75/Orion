@@ -1,15 +1,13 @@
 package com.openclassrooms.mddapi.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.openclassrooms.mddapi.data.services.TopicService;
 import com.openclassrooms.mddapi.dto.MessageToReturn;
 import com.openclassrooms.mddapi.dto.TopicsDto;
 import java.util.Set;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
 
 
 
@@ -35,10 +33,28 @@ public class TopicsController {
         return new MessageToReturn("oui");
     }
 
-    //route pour les topics abonnés
+    @PutMapping("/subscribe")
+    public MessageToReturn subscribeToTopic(@RequestParam Long topicId, @RequestParam Long userId) {
+        Boolean result = topicService.subscribeToTopic(topicId, userId);
+        MessageToReturn response = new MessageToReturn(null);
+        if(result){
+            response.setMessage("Subscription successful");
+        } else {
+            response.setMessage("Subscription failed");
+        }
+        return response;
+    }
 
-    //route pour s'abonner à un topic
-
-    //route pour se désabonner d'un topic
+    @PutMapping("/unsubscribe")
+    public MessageToReturn unsubscribeFromTopic(@RequestParam Long topicId, @RequestParam Long userId) {
+        Boolean result = topicService.unsubscribeFromTopic(topicId, userId);
+        MessageToReturn response = new MessageToReturn(null);
+        if(result){
+            response.setMessage("Unsubscription successful");
+        } else {
+            response.setMessage("Unsubscription failed");
+        }
+        return response;
+    }
     
 }
