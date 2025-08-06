@@ -3,18 +3,30 @@ package com.openclassrooms.mddapi.mappers;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.openclassrooms.mddapi.data.entity.CommentEntity;
 import com.openclassrooms.mddapi.data.entity.PostEntity;
-import com.openclassrooms.mddapi.data.entity.TopicsEntity;
-import com.openclassrooms.mddapi.data.entity.UserEntity;
 import com.openclassrooms.mddapi.dto.CommentDto;
 import com.openclassrooms.mddapi.dto.PostDto;
-import com.openclassrooms.mddapi.dto.UserDto;
+import com.openclassrooms.mddapi.dto.PostSummarizeDto;
 
-
+@Component
 public class PostMapper {
-    // This class will contain methods to map entities to DTOs
-    // For example, mapping UserEntity to UserDto
+
+    public static PostSummarizeDto mapToPostSummarizeDto(PostEntity postEntity) {
+        if (postEntity == null) {
+            return null;
+        }
+
+        PostSummarizeDto postToReturn = new PostSummarizeDto();
+        postToReturn.setAuthor(postEntity.getAuthor());
+        postToReturn.setTitle(postEntity.getTitle());
+        postToReturn.setContent(postEntity.getContent());
+        postToReturn.setCreatedAt(postEntity.getCreatedAt());
+
+        return postToReturn;
+    }
 
    public static PostDto mapToDto(PostEntity postEntity) {
         if (postEntity == null) {
@@ -27,9 +39,12 @@ public class PostMapper {
         postToReturn.setTitle(postEntity.getTitle());
         postToReturn.setContent(postEntity.getContent());
         postToReturn.setCreatedAt(postEntity.getCreatedAt());
-
-        // ✅ C'EST LA PARTIE QUI MANQUAIT ✅
-        // On s'occupe des commentaires
+        postToReturn.setId(postEntity.getId());
+        postToReturn.setTopics(
+            postEntity.getTopics().stream()
+                .map(TopicsMapper::mapToSummarizeDto)
+                .collect(Collectors.toSet())
+        );
         if (postEntity.getComments() != null) {
             postToReturn.setComments(
                 postEntity.getComments().stream()
@@ -53,17 +68,6 @@ public class PostMapper {
             entity.getAuthor(),
             entity.getCreatedAt()
         );
-    }
-
-    public static UserEntity mapToEntity(UserDto userDto) {
-        if (userDto == null) {
-            return null;
-        }
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(userDto.getId());
-        userEntity.setUsername(userDto.getUsername());
-        userEntity.setEmail(userDto.getEmail());
-        return userEntity;
     }
     
 }

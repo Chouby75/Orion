@@ -1,6 +1,9 @@
 package com.openclassrooms.mddapi.data.services;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mddapi.data.entity.TopicsEntity;
@@ -12,16 +15,20 @@ import com.openclassrooms.mddapi.mappers.TopicsMapper;
 public class TopicService {
 
     private final TopicsRepo topicsRepo;
-    private final TopicsMapper topicsMapper;
 
-    public TopicService(TopicsRepo topicsRepo, TopicsMapper topicsMapper) {
+    public TopicService(TopicsRepo topicsRepo) {
         this.topicsRepo = topicsRepo;
-        this.topicsMapper = topicsMapper;
     }
 
-    public List<TopicsDto> getTopics() {
+    public Set<TopicsDto> getTopics() {
+
         Iterable<TopicsEntity> topicsEntities = topicsRepo.findAll();
-        List<TopicsEntity> topicsEntitiesList = (List<TopicsEntity>) topicsEntities;
-        return topicsMapper.toDtos(topicsEntitiesList);
+        
+        Set<TopicsEntity> topicsSet = new HashSet<>();
+        topicsEntities.forEach(topicsSet::add);
+
+        return topicsSet.stream()
+            .map(TopicsMapper::mapToDto)
+            .collect(Collectors.toSet());
     }
 }

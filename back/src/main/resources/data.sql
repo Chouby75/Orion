@@ -1,4 +1,4 @@
-INSERT INTO TOPICS (name) VALUES
+INSERT IGNORE INTO TOPICS (name) VALUES
 ('JavaScript'),
 ('Angular'),
 ('React'),

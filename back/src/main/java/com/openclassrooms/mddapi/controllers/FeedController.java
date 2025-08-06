@@ -3,6 +3,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.mddapi.dto.PostDto;
+import com.openclassrooms.mddapi.dto.PostSummarizeDto;
 import com.openclassrooms.mddapi.data.services.PostService;
 import com.openclassrooms.mddapi.dto.CommentDto;
 import com.openclassrooms.mddapi.dto.MessageToReturn;
@@ -10,6 +11,11 @@ import com.openclassrooms.mddapi.dto.MessageToReturn;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,18 +71,21 @@ public class FeedController {
     }
 
     @GetMapping()
-    public PostDto[] getFeed() {
-        PostDto[] posts = postService.getFeed();
-        return posts;
+    public ResponseEntity<?> getFeed() {
+        List<PostSummarizeDto> posts = postService.getFeed();
+        return new ResponseEntity<>(posts, posts.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")
-    public PostDto getPost(@PathVariable  Long postId) {
+    public ResponseEntity<?> getPost(@PathVariable  Long postId) {
         if (postId ==null) {
             return null;
         }
         PostDto postToReturn = postService.getPostById(postId);
-        return postToReturn;
+        if (postToReturn == null) {
+            return new ResponseEntity<>("No post found for this id",HttpStatus.FORBIDDEN); // or throw an exception if preferred
+        }
+        return new ResponseEntity<>(postToReturn, HttpStatus.OK);
     }
 
 

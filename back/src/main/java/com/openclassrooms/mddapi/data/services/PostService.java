@@ -3,23 +3,30 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.data.repo.PostRepo;
 import com.openclassrooms.mddapi.data.entity.CommentEntity;
 import com.openclassrooms.mddapi.data.entity.PostEntity;
+import com.openclassrooms.mddapi.data.entity.TopicsEntity;
 import com.openclassrooms.mddapi.dto.CommentDto;
 import com.openclassrooms.mddapi.dto.PostDto;
+import com.openclassrooms.mddapi.dto.PostSummarizeDto;
+import com.openclassrooms.mddapi.dto.TopicsSummarizeDto;
 import com.openclassrooms.mddapi.mappers.PostMapper;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import com.openclassrooms.mddapi.data.repo.TopicsRepo;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
 
     private final PostRepo postRepo;
 
-    public PostService(PostRepo postRepo) {
+    private final TopicsRepo topicsRepo;
+
+    public PostService(PostRepo postRepo, TopicsRepo topicsRepo) {
         this.postRepo = postRepo;
+        this.topicsRepo = topicsRepo;
     }
     
     public Boolean createPost(PostDto post) {
@@ -28,29 +35,33 @@ public class PostService {
             return false;
         }
 
+        Set<TopicsSummarizeDto> topicsdto = post.getTopics();
+    
+        if (topicsdto == null || topicsdto.isEmpty()) {
+            return false;
+        }
+
+        Set<TopicsEntity> topicsSet = new HashSet<>();
+        topicsRepo.findAllByNameIn(topicsdto.stream()
+                .map(TopicsSummarizeDto::getName)
+                .collect(Collectors.toSet())).forEach(topicsSet::add);
+
         PostEntity postEntity = new PostEntity();
             postEntity.setTitle(post.getTitle());
             postEntity.setContent(post.getContent());
             postEntity.setAuthor(post.getAuthor());
+            postEntity.setTopics(topicsSet);
+            
 
             PostEntity save = postRepo.save(postEntity);
             
         return save.getId() != null;
     }
 
-    public PostDto[] getFeed() {
-
-        PostDto[] posts = StreamSupport.stream(this.postRepo.findAll().spliterator(), false)
-                .map(postEntity -> new PostDto(
-                        postEntity.getTitle(),
-                        postEntity.getContent(),
-                        postEntity.getAuthor(),
-                        postEntity.getCreatedAt(),
-                        postEntity.getComments().stream()
-                                .map(PostMapper::CommenttoDto)
-                                .collect(Collectors.toList())))
-                .toArray(PostDto[]::new);
-        return posts;
+    public List<PostSummarizeDto> getFeed() {
+        return StreamSupport.stream(postRepo.findAll().spliterator(), false)
+                .map(PostMapper::mapToPostSummarizeDto)
+                .collect(Collectors.toList());
     }
 
     public Boolean postComment(Long id, CommentDto comment) {
@@ -73,8 +84,12 @@ public class PostService {
 }
 
     public PostDto getPostById(Long id){
-        PostEntity postOptional = postRepo.findById(id).get();
-        PostDto postDtoById = PostMapper.mapToDto(postOptional);
+        Optional<PostEntity> postOptional = postRepo.findById(id);
+        if (postOptional.isEmpty()) {
+            return null; // or throw an exception if preferred
+        }
+
+        PostDto postDtoById = PostMapper.mapToDto(postOptional.get());
         
         return postDtoById;
     }

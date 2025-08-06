@@ -1,18 +1,19 @@
 package com.openclassrooms.mddapi.dto;
 
-public class TopicsDto {
+public class TopicsSummarizeDto {
 
     private Long id;
     private String name;
-    private String description;
 
-    public TopicsDto() {
+    // --- Constructeurs ---
+
+    public TopicsSummarizeDto() {
+        // Constructeur par défaut, essentiel pour la désérialisation
     }
 
-    public TopicsDto(Long id, String name, String description) {
+    public TopicsSummarizeDto(Long id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.description = description;
     }
 
     public Long getId() {
@@ -29,13 +30,5 @@ public class TopicsDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface TopicsRepo extends CrudRepository<TopicsEntity, Long> {
     Optional<TopicsEntity> findByName(String name);
+    Optional<TopicsEntity> findById(Long id);
+    Iterable<TopicsEntity> findAllByNameIn(Iterable<String> names);
 }

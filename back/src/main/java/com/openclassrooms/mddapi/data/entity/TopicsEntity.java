@@ -23,6 +23,9 @@ public class TopicsEntity {
     @Column(name = "name", unique = true)
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToMany(mappedBy = "subscriptions")
     private Set<UserEntity> subscribers = new HashSet<>();
 
@@ -32,9 +35,10 @@ public class TopicsEntity {
     public TopicsEntity() {
     }
 
-    public TopicsEntity(Long id, String name, Set<UserEntity> subscribers, Set<PostEntity> posts) {
+    public TopicsEntity(Long id, String name, String description, Set<UserEntity> subscribers, Set<PostEntity> posts) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.subscribers = subscribers;
         this.posts = posts;
     }
@@ -69,5 +73,13 @@ public class TopicsEntity {
 
     public void setPosts(Set<PostEntity> posts) {
         this.posts = posts;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

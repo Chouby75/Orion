@@ -1,31 +1,24 @@
 package com.openclassrooms.mddapi.dto;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-public class PostDto {
+public class PostSummarizeDto {
 
     private Long id;
     private String title;
     private String content;
     private String author;
-    private Set<TopicsSummarizeDto> topics = new HashSet<>();
     private LocalDateTime createdAt;
-    private List<CommentDto> comments;
 
-    public PostDto() {
+    public PostSummarizeDto() {
     }
 
-    public PostDto(Long id ,String title, String content, String author, Set<TopicsSummarizeDto> topics, LocalDateTime createdAt, List<CommentDto> comments) {
+    public PostSummarizeDto(Long id, String title, String content, String author, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
-        this.topics = topics;
         this.createdAt = createdAt;
-        this.comments = comments;
     }
 
     public String getTitle() {
@@ -58,22 +51,6 @@ public class PostDto {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public List<CommentDto> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentDto> comments) {
-        this.comments = comments;
-    }
-
-    public Set<TopicsSummarizeDto> getTopics() {
-        return topics;
-    }
-
-    public void setTopics(Set<TopicsSummarizeDto> topics) {
-        this.topics = topics;
     }
 
     public Long getId() {
