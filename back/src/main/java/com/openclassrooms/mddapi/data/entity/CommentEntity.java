@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.data.entity;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
@@ -28,7 +30,7 @@ public class CommentEntity {
     private String author;
 
     @Column(name = "created_at", updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "content")
     private String content;
@@ -36,12 +38,17 @@ public class CommentEntity {
     public CommentEntity() {
     }
 
-    public CommentEntity(Long id, String content, String author, Date createdAt, PostEntity post) {
+    public CommentEntity(Long id, String content, String author, LocalDateTime createdAt, PostEntity post) {
         this.id = id;
         this.content = content;
         this.author = author;
         this.createdAt = createdAt;
         this.post = post;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -68,11 +75,11 @@ public class CommentEntity {
         this.author = author;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

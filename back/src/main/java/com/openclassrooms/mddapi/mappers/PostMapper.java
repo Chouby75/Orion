@@ -20,6 +20,7 @@ public class PostMapper {
         }
 
         PostSummarizeDto postToReturn = new PostSummarizeDto();
+        postToReturn.setId(postEntity.getId());
         postToReturn.setAuthor(postEntity.getAuthor());
         postToReturn.setTitle(postEntity.getTitle());
         postToReturn.setContent(postEntity.getContent());
