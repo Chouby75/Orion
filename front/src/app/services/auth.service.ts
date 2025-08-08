@@ -9,8 +9,12 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: { username: string; password: string }): Observable<any> {
-    console.log('Logging in with credentials:', credentials);
-    return this.http.post('http://localhost:3001/api/auth/login', credentials);
+    const response: Observable<any> = this.http.post(
+      'http://localhost:3001/api/auth/login',
+      credentials
+    );
+    // localStorage.setItem('auth_token', response.token);
+    return response;
   }
 
   register(user: {
@@ -18,6 +22,11 @@ export class AuthService {
     email: string;
     password: string;
   }): Observable<any> {
-    return this.http.post('http://localhost:3001/api/auth/register', user);
+    const response: Observable<any> = this.http.post(
+      'http://localhost:3001/api/auth/register',
+      user
+    );
+    // localStorage.setItem('auth_token', response.token);
+    return response;
   }
 }
