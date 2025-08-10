@@ -1,0 +1,112 @@
+// --- Variables pour une maintenance facile ---
+// C'est comme déclarer des constantes en JS, ça rend le code plus propre.
+$primary-color: #7c5dfa;
+$primary-color-light: #9277ff;
+$card-bg: #ffffff;
+$page-bg: #f8f8fb; // Un gris très clair pour le fond de page
+$text-color: #0c0e16; // Noir/gris foncé pour les titres
+$text-light: #7e88c3; // Gris/bleu clair pour les textes secondaires
+$border-radius: 8px;
+$shadow: 0 10px 15px -3px rgba(72, 84, 159, 0.1);
+
+// --- Style du conteneur principal ---
+.feed-container {
+  max-width: 900px;
+  margin: 40px auto; // Centre le conteneur et ajoute de l'espace en haut/bas
+  padding: 0 20px;
+  font-family: "League Spartan", sans-serif; // Police qui ressemble à la maquette, tu peux la changer
+}
+
+// --- Style de l'en-tête (bouton + tri) ---
+.feed-header {
+  display: flex;
+  justify-content: space-between; // Pousse les éléments aux extrémités
+  align-items: center; // Centre les éléments verticalement
+  margin-bottom: 40px;
+}
+
+// --- Style du bouton "Créer un article" ---
+.create-article-btn {
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 8px; // Pour un bouton bien arrondi
+  padding: 12px 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease; // Petite animation au survol
+
+  &:hover {
+    background-color: $primary-color-light;
+  }
+}
+
+// --- Style du contrôle de tri ---
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 8px; // Espace entre "Trier par" et la flèche
+  font-weight: bold;
+  color: $text-color;
+  cursor: pointer;
+
+  .sort-icon {
+    color: $primary-color; // Flèche en couleur primaire
+  }
+}
+
+// --- Style de la grille d'articles ---
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+// --- Style de chaque carte d'article ---
+.article-card {
+  background-color: $card-bg;
+  border-radius: $border-radius;
+  padding: 24px;
+  box-shadow: $shadow;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px -5px rgba(72, 84, 159, 0.15);
+  }
+
+  // --- Styles des éléments à l'intérieur de la carte ---
+  .article-title {
+    font-size: 1.2rem;
+    color: $text-color;
+    margin: 0 0 16px 0;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 24px;
+    font-size: 0.9rem;
+    color: $text-light;
+    margin-bottom: 16px;
+  }
+
+  .article-description {
+    font-size: 0.9rem;
+    color: $text-light;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// --- Rendre le tout responsive pour les mobiles ---
+@media (max-width: 768px) {
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feed-header {
+    .create-article-btn {
+      padding: 10px 15px;
+    }
+  }
+}

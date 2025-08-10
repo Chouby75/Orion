@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Token } from '../models/token';
+import { tap } from 'rxjs/operators';
+import { ProfileUpdate } from '../models/profile';
 
 @Injectable({
   providedIn: 'root',
@@ -8,25 +11,23 @@ import { Observable } from 'rxjs';
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  login(credentials: { username: string; password: string }): Observable<any> {
-    const response: Observable<any> = this.http.post(
-      'http://localhost:3001/api/auth/login',
-      credentials
-    );
-    // localStorage.setItem('auth_token', response.token);
-    return response;
+  login(credentials: ProfileUpdate): Observable<Token> {
+    return this.http
+      .post<Token>('http://localhost:3001/api/auth/login', credentials)
+      .pipe(
+        tap((token: Token) => {
+          localStorage.setItem('auth_token', token.token);
+        })
+      );
   }
 
-  register(user: {
-    username: string;
-    email: string;
-    password: string;
-  }): Observable<any> {
-    const response: Observable<any> = this.http.post(
-      'http://localhost:3001/api/auth/register',
-      user
-    );
-    // localStorage.setItem('auth_token', response.token);
-    return response;
+  register(user: ProfileUpdate): Observable<Token> {
+    return this.http
+      .post<Token>('http://localhost:3001/api/auth/register', user)
+      .pipe(
+        tap((token: Token) => {
+          localStorage.setItem('auth_token', token.token);
+        })
+      );
   }
 }

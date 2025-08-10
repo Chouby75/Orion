@@ -1,0 +1,57 @@
+<div class="form-container">
+  <div class="header">
+    <button mat-icon-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Créer un nouvel article</h1>
+  </div>
+
+  <form [formGroup]="postForm" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Sélectionner un thème</mat-label>
+      <mat-select formControlName="theme">
+        <mat-option *ngFor="let theme of themes" [value]="theme.id">
+          {{ theme.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="postForm.get('theme')?.hasError('required')">
+        Le thème est obligatoire.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Titre de l'article</mat-label>
+      <input
+        matInput
+        formControlName="titre"
+        placeholder="Le titre de votre super article"
+      />
+      <mat-error *ngIf="postForm.get('titre')?.hasError('required')">
+        Le titre est obligatoire.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="content-field">
+      <mat-label>Contenu de l'article</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Écrivez votre contenu ici..."
+      ></textarea>
+      <mat-error *ngIf="postForm.get('description')?.hasError('required')">
+        Le contenu est obligatoire.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="button-container">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="postForm.invalid"
+      >
+        Créer
+      </button>
+    </div>
+  </form>
+</div>

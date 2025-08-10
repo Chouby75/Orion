@@ -1,0 +1,138 @@
+// Variables pour les couleurs, comme ça tu changes tout d'un coup !
+$primary-color: #704de6; // Un violet qui ressemble à ta maquette
+$active-color: #5a38c2; // Une version plus foncée pour le lien actif
+$logout-color: #d9534f;
+$text-color: #333;
+$border-color: #e0e0e0;
+$background-light: #f8f9fa;
+
+// Conteneur principal du header
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid $border-color;
+  position: relative; // Important pour positionner le menu mobile
+}
+
+// Style du logo
+.logo {
+  height: 100px;
+}
+
+// --- Styles pour la vue Ordinateur ---
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+
+  a {
+    text-decoration: none;
+    color: $text-color;
+    font-size: 1.1rem;
+    padding: 5px;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  // Le fameux style pour le lien actif !
+  .active-link {
+    color: $primary-color;
+    font-weight: 600;
+  }
+
+  .logout-link {
+    color: $logout-color;
+  }
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+// --- Styles pour la vue Mobile ---
+
+// On cache le bouton hamburger par défaut
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+
+  span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: $text-color;
+  }
+}
+
+// On cache aussi le menu mobile par défaut
+.mobile-nav {
+  display: none;
+}
+
+// On utilise les Media Queries : si l'écran fait 768px de large ou moins...
+@media (max-width: 768px) {
+  // ... on cache la navigation d'ordinateur
+  .desktop-nav {
+    display: none;
+  }
+
+  // ... et on affiche le bouton hamburger
+  .hamburger-menu {
+    display: flex;
+  }
+
+  // Le menu mobile qui apparaît
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: absolute;
+    top: 100%; // Juste en dessous du header
+    right: 0;
+    background-color: white;
+    width: 250px;
+    padding: 20px;
+    box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transform: translateX(100%); // Caché sur le côté
+    transition: transform 0.3s ease-in-out;
+
+    // Quand le menu est ouvert...
+    &.is-open {
+      transform: translateX(0); // ... il revient à sa place
+    }
+
+    a {
+      text-decoration: none;
+      color: $text-color;
+      font-size: 1.2rem;
+    }
+
+    .active-link {
+      color: $primary-color;
+      font-weight: bold;
+    }
+  }
+
+  .profile-icon-mobile {
+    margin-top: 20px;
+    align-self: center;
+    // Tu peux reprendre les styles de .profile-icon si tu veux le même rendu
+  }
+}

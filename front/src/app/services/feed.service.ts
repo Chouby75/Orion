@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PostForm } from '../models/post';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,7 @@ export class FeedService {
     });
   }
 
-  createPost(post: { title: string; content: string }): Observable<any> {
+  createPost(post: PostForm): Observable<any> {
     return this.http.post('http://localhost:3001/api/feed', post, {
       headers: this.header,
     });

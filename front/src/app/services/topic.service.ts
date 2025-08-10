@@ -22,7 +22,6 @@ export class TopicService {
   subscribeToTopic(topicId: number, userId: number): Observable<any> {
     return this.http.post(
       `http://localhost:3001/api/topics/subscribe?topicId=${topicId}&&userId=${userId}`,
-      {},
       {
         headers: this.header,
       }
@@ -32,7 +31,6 @@ export class TopicService {
   unsubscribeFromTopic(topicId: number, userId: number): Observable<any> {
     return this.http.post(
       `http://localhost:3001/api/topics/unsubscribe?topicId=${topicId}&&userId=${userId}`,
-      {},
       {
         headers: this.header,
       }

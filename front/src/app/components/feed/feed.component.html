@@ -1,0 +1,27 @@
+<div class="feed-container">
+  <div class="feed-header">
+    <button class="create-article-btn" (click)="createPost()">
+      Créer un article
+    </button>
+    <div class="sort-control">
+      <span>Trier par ↓</span>
+    </div>
+  </div>
+
+  <div class="articles-grid">
+    <div class="article-card" *ngFor="let article of articles">
+      <h3 class="article-title">{{ article.title }}</h3>
+
+      <div class="article-meta">
+        <span class="article-date">{{
+          article.createdAt | date : "dd/MM/yyyy"
+        }}</span>
+        <span class="article-author">{{ article.author }}</span>
+      </div>
+
+      <p class="article-description">
+        {{ article.content }}
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<header class="header-container">
+  <a routerLink="/" class="logo"
+    ><img class="logo" src="/assets/logo_p6.png"
+  /></a>
+
+  <nav class="desktop-nav">
+    <a
+      routerLink="/feed"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Articles</a
+    >
+    <a
+      routerLink="/topic"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Thèmes</a
+    >
+    <a href="#" class="logout-link">Se déconnecter</a>
+    <div class="profile-icon">
+      <span>🧑‍🚀</span>
+    </div>
+  </nav>
+
+  <button class="hamburger-menu" (click)="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="mobile-nav" [class.is-open]="isMenuOpen">
+    <a href="#" class="logout-link" (click)="closeMenu()">Se déconnecter</a>
+    <a
+      routerLink="/articles"
+      routerLinkActive="active-link"
+      (click)="closeMenu()"
+      >Articles</a
+    >
+    <a routerLink="/themes" routerLinkActive="active-link" (click)="closeMenu()"
+      >Thèmes</a
+    >
+    <div class="profile-icon-mobile">
+      <span>🧑‍🚀</span>
+    </div>
+  </nav>
+</header>

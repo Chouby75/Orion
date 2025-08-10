@@ -37,8 +37,6 @@ export class LoginComponent implements OnInit {
       const credentials = this.loginForm.value;
       this.login = this.authService.login(credentials).subscribe(
         (response) => {
-          console.log('Login successful', response);
-          localStorage.setItem('token', response.token);
           this.router.navigate(['/feed']);
         },
         (error) => {
