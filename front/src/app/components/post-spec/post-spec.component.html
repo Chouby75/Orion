@@ -1,0 +1,103 @@
+<div class="post-page-container">
+  <header class="post-header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ article.title }}</h1>
+  </header>
+
+  <section class="post-meta">
+    <span>Date : {{ article.createdAt | date : "dd/MM/yyyy" }}</span>
+    <span>Auteur : {{ article.author }}</span>
+    <div class="meta-item topics-container">
+      <span>Thèmes :</span>
+      <div class="pills-wrapper">
+        <span *ngFor="let topic of article.topics" class="topic-pill">
+          {{ topic.name }}
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <main class="post-content">
+    <p>{{ article.content }}</p>
+  </main>
+
+  <section class="comments-section">
+    <h2>Commentaires ({{ article.comments?.length || 0 }})</h2>
+
+    <!-- Liste des commentaires -->
+    <div
+      class="comments-list"
+      *ngIf="article.comments?.length > 0; else noComments"
+    >
+      <div class="comment-item" *ngFor="let comment of article.comments">
+        <div class="comment-body">
+          <strong class="comment-username">{{ comment.author }}</strong>
+          <span class="comment-date">{{
+            comment.createdAt | date : "dd/MM/yyyy à HH:mm"
+          }}</span>
+          <p class="comment-text">{{ comment.content }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message si pas de commentaires -->
+    <ng-template #noComments>
+      <p class="no-comments">
+        Aucun commentaire pour le moment. Soyez le premier à commenter !
+      </p>
+    </ng-template>
+  </section>
+
+  <!-- Formulaire de commentaire -->
+  <form
+    class="comment-form"
+    [formGroup]="commentForm"
+    (ngSubmit)="onSubmitComment()"
+  >
+    <div class="form-field">
+      <textarea
+        formControlName="content"
+        placeholder="Écrivez ici votre commentaire..."
+        rows="3"
+        [class.error]="commentContent?.invalid && commentContent?.touched"
+      ></textarea>
+
+      <!-- Messages d'erreur -->
+      <div
+        class="error-messages"
+        *ngIf="commentContent?.invalid && commentContent?.touched"
+      >
+        <span *ngIf="commentContent?.hasError('required')" class="error-text">
+          Le commentaire est obligatoire
+        </span>
+        <span *ngIf="commentContent?.hasError('minlength')" class="error-text">
+          Le commentaire doit contenir au moins 3 caractères
+        </span>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="send-button"
+      [disabled]="commentForm.invalid || isSubmitting"
+      [class.submitting]="isSubmitting"
+    >
+      <span *ngIf="!isSubmitting">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          width="24"
+          height="24"
+        >
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+        </svg>
+      </span>
+      <span *ngIf="isSubmitting" class="spinner">⏳</span>
+    </button>
+  </form>
+</div>
+
+<button class="fab">F</button>

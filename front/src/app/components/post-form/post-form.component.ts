@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FeedService } from '../../services/feed.service'; // Adapte le chemin vers ton service
+import { TopicService } from 'src/app/services/topic.service';
+import { Topic } from 'src/app/models/topic';
 
 @Component({
   selector: 'app-post-form',
@@ -10,41 +12,65 @@ import { FeedService } from '../../services/feed.service'; // Adapte le chemin v
 })
 export class PostFormComponent implements OnInit {
   public postForm: FormGroup;
-  // TODO: Remplace ce tableau par un appel à ton service pour récupérer les thèmes
-  public themes = [
-    { id: 1, name: 'Jeux Vidéo' },
-    { id: 2, name: 'Cinéma' },
-    { id: 3, name: 'Musique' },
-    { id: 4, name: 'Tech' },
-  ];
+  public themes: Topic[] = [];
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private articleService: FeedService
+    private articleService: FeedService,
+    private topicService: TopicService
   ) {
     this.postForm = this.fb.group({
-      theme: ['', [Validators.required]],
-      titre: ['', [Validators.required, Validators.minLength(5)]],
-      description: ['', [Validators.required, Validators.minLength(20)]],
+      title: ['', [Validators.required]],
+      content: ['', [Validators.required]],
+      topics: [[], [Validators.required]],
     });
   }
 
   ngOnInit(): void {
-    // Ici, tu pourrais appeler un service pour charger la liste des thèmes par exemple
+    this.topicService.getTopics().subscribe(
+      (data) => {
+        this.themes = data;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des thèmes:', error);
+      }
+    );
+  }
+
+  onTopicChange(event: any, topicName: string) {
+    const currentTopics = this.postForm.get('topics')?.value || [];
+
+    if (event.target.checked) {
+      currentTopics.push({ name: topicName });
+    } else {
+      const index = currentTopics.findIndex(
+        (topic: any) => topic.name === topicName
+      );
+      if (index > -1) {
+        currentTopics.splice(index, 1);
+      }
+    }
+
+    this.postForm.patchValue({ topics: currentTopics });
   }
 
   public submit(): void {
     if (this.postForm.valid) {
-      // Le formulaire est valide, on peut envoyer les données
-      console.log('Données du formulaire :', this.postForm.value);
+      const formData = this.postForm.value;
+      const postData = {
+        title: formData.title,
+        content: formData.content,
+        topics: formData.topics.map((topicName: string) => ({
+          name: topicName,
+        })),
+      };
 
-      // --- Voici comment tu appellerais ton service ---
-      this.articleService.createPost(this.postForm.value).subscribe(
+      console.log("Données envoyées à l'API :", postData);
+
+      this.articleService.createPost(postData).subscribe(
         (response) => {
-          console.log('Article créé avec succès !', response);
-          // On redirige l'utilisateur vers la liste des articles
-          this.router.navigate(['/articles']);
+          this.router.navigate(['main/feed']); // Changez pour votre route correcte
         },
         (error) => {
           console.error("Erreur lors de la création de l'article", error);

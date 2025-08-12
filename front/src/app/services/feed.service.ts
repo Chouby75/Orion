@@ -20,7 +20,7 @@ export class FeedService {
     });
   }
 
-  getPostById(id: number): Observable<any> {
+  getPostById(id: string): Observable<any> {
     return this.http.get(`http://localhost:3001/api/feed/${id}`, {
       headers: this.header,
     });
@@ -34,8 +34,8 @@ export class FeedService {
 
   commentOnPost(postId: string, comment: { content: string }): Observable<any> {
     return this.http.post(
-      `http://localhost:3001/api/feed/${postId}/comments`,
-      comment,
+      `http://localhost:3001/api/feed/${postId}/comment`,
+      { content: comment },
       {
         headers: this.header,
       }

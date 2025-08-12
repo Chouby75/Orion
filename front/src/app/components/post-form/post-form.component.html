@@ -7,38 +7,42 @@
   </div>
 
   <form [formGroup]="postForm" (ngSubmit)="submit()">
+    <!-- Sélection multiple de thèmes -->
     <mat-form-field appearance="outline">
-      <mat-label>Sélectionner un thème</mat-label>
-      <mat-select formControlName="theme">
-        <mat-option *ngFor="let theme of themes" [value]="theme.id">
+      <mat-label>Sélectionner des thèmes</mat-label>
+      <mat-select formControlName="topics" multiple>
+        <mat-option *ngFor="let theme of themes" [value]="theme.name">
           {{ theme.name }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="postForm.get('theme')?.hasError('required')">
-        Le thème est obligatoire.
+      <mat-error *ngIf="postForm.get('topics')?.hasError('required')">
+        Au moins un thème est obligatoire.
       </mat-error>
     </mat-form-field>
 
+    <!-- Titre -->
     <mat-form-field appearance="outline">
       <mat-label>Titre de l'article</mat-label>
       <input
         matInput
-        formControlName="titre"
+        formControlName="title"
         placeholder="Le titre de votre super article"
       />
-      <mat-error *ngIf="postForm.get('titre')?.hasError('required')">
+      <mat-error *ngIf="postForm.get('title')?.hasError('required')">
         Le titre est obligatoire.
       </mat-error>
     </mat-form-field>
 
+    <!-- Contenu -->
     <mat-form-field appearance="outline" class="content-field">
       <mat-label>Contenu de l'article</mat-label>
       <textarea
         matInput
-        formControlName="description"
+        formControlName="content"
         placeholder="Écrivez votre contenu ici..."
+        rows="6"
       ></textarea>
-      <mat-error *ngIf="postForm.get('description')?.hasError('required')">
+      <mat-error *ngIf="postForm.get('content')?.hasError('required')">
         Le contenu est obligatoire.
       </mat-error>
     </mat-form-field>

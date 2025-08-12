@@ -6,8 +6,14 @@ export interface PostSummary {
   createdAt: Date;
 }
 
-export interface PostForm {
+export class PostForm {
   title: string;
   content: string;
   topics: string[];
+
+  constructor(title: string = '', content: string = '', topics: string[] = []) {
+    this.title = title;
+    this.content = content;
+    this.topics = topics;
+  }
 }

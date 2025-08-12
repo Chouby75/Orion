@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
       const credentials = this.RegisterForm.value;
       this.register = this.authService.register(credentials).subscribe(
         (response) => {
-          this.router.navigate(['/feed']);
+          this.router.navigate(['/main/feed']);
         },
         (error) => {
           console.error('Register failed', error);

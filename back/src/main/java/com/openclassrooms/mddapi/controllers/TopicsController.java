@@ -2,10 +2,14 @@ package com.openclassrooms.mddapi.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.openclassrooms.mddapi.data.repo.UserRepo;
 import com.openclassrooms.mddapi.data.services.TopicService;
 import com.openclassrooms.mddapi.dto.MessageToReturn;
 import com.openclassrooms.mddapi.dto.TopicsDto;
 import java.util.Set;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -18,8 +22,11 @@ public class TopicsController {
 
     private final TopicService topicService;
 
-    public TopicsController(TopicService topicService){
+    private final UserRepo userRepo;
+
+    public TopicsController(TopicService topicService, UserRepo userRepo) {
         this.topicService = topicService;
+        this.userRepo = userRepo;
     }
 
     @GetMapping()
@@ -34,7 +41,12 @@ public class TopicsController {
     }
 
     @PutMapping("/subscribe")
-    public MessageToReturn subscribeToTopic(@RequestParam Long topicId, @RequestParam Long userId) {
+    public MessageToReturn subscribeToTopic(@RequestParam Long topicId, Authentication authentication) {
+        String username = authentication.getName();
+        if (username == null) {
+            return new MessageToReturn("User not authenticated or author not specified");
+        }
+        Long userId = userRepo.findByUsername(username).get().getId();
         Boolean result = topicService.subscribeToTopic(topicId, userId);
         MessageToReturn response = new MessageToReturn(null);
         if(result){
@@ -46,7 +58,12 @@ public class TopicsController {
     }
 
     @PutMapping("/unsubscribe")
-    public MessageToReturn unsubscribeFromTopic(@RequestParam Long topicId, @RequestParam Long userId) {
+    public MessageToReturn unsubscribeFromTopic(@RequestParam Long topicId, Authentication authentication) {
+        String username = authentication.getName();
+        if (username == null) {
+            return new MessageToReturn("User not authenticated or author not specified");
+        }
+        Long userId = userRepo.findByUsername(username).get().getId();
         Boolean result = topicService.unsubscribeFromTopic(topicId, userId);
         MessageToReturn response = new MessageToReturn(null);
         if(result){

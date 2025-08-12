@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,20 +11,27 @@ export class HeaderComponent implements OnInit {
   // On l'initialise à 'false' car au début, le menu est fermé.
   isMenuOpen: boolean = false;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
-  // Cette fonction est appelée quand on clique sur le bouton hamburger.
-  // Elle inverse simplement la valeur de 'isMenuOpen'.
-  // Si c'était 'false', ça devient 'true', et vice-versa.
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  // Cette fonction est appelée quand on clique sur un lien dans le menu mobile.
-  // Elle force la fermeture du menu pour que l'utilisateur voie la nouvelle page.
   closeMenu(): void {
     this.isMenuOpen = false;
+  }
+
+  goToFeed(): void {
+    this.router.navigate(['main/feed']);
+  }
+
+  goToTopics(): void {
+    this.router.navigate(['main/topics']);
+  }
+
+  goToProfile(): void {
+    this.router.navigate(['main/profile']);
   }
 }

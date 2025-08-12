@@ -1,0 +1,165 @@
+// Variables
+$primary-color: #704de6;
+$text-color: #333;
+$grey-color: #888;
+$border-color: #e0e0e0;
+$input-bg-color: #f0f2f5;
+$fab-color: #f53d7a; // Un rose/fushia comme sur la maquette
+
+// Conteneur général de la page
+.post-page-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+// 1. En-tête
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  h1 {
+    font-size: 1.8rem;
+    margin: 0;
+  }
+  .back-button {
+    font-size: 2rem;
+    text-decoration: none;
+    color: $text-color;
+  }
+}
+
+// 2. Métadonnées
+.post-meta {
+  display: flex;
+  gap: 1.5rem;
+  color: $grey-color;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+// 3. Contenu
+.post-content {
+  line-height: 1.6;
+  color: $text-color;
+  border-bottom: 1px solid $border-color;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  position: relative; // crucial pour l'avatar
+
+  .author-avatar-end {
+    position: absolute;
+    bottom: 5px; // Ajuste pour bien se superposer
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+}
+
+// 4. Commentaires
+.comments-section {
+  margin-bottom: 2rem;
+}
+
+.comment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $input-bg-color;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.comment-username {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.comment-text {
+  margin: 0.25rem 0 0;
+}
+
+.comment-reactions {
+  display: flex;
+  gap: 0.5rem;
+  span {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    color: white;
+    font-weight: bold;
+    &:nth-child(1) {
+      background-color: purple;
+    }
+    &:nth-child(2) {
+      background-color: orange;
+    }
+  }
+}
+
+// 5. Formulaire de commentaire
+.comment-form {
+  position: relative;
+  textarea {
+    width: 100%;
+    min-height: 80px;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 1rem 3.5rem 1rem 1rem; // Laisse de la place pour le bouton
+    resize: vertical;
+    font-family: inherit;
+  }
+  .send-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $primary-color;
+  }
+}
+
+// Bouton Flottant (FAB)
+.fab {
+  display: none; // Caché par défaut
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: $fab-color;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+// --- RESPONSIVE ---
+@media (max-width: 768px) {
+  .post-page-container {
+    margin: 1rem auto;
+  }
+  .post-header h1 {
+    font-size: 1.5rem;
+  }
+  .post-meta {
+    flex-direction: column; // On met les métadonnées en colonne
+    gap: 0.5rem;
+  }
+  .comment-reactions {
+    display: none; // On cache les réactions sur mobile pour simplifier
+  }
+  .fab {
+    display: block; // On affiche le FAB sur mobile
+  }
+}

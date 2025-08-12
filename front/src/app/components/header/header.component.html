@@ -8,16 +8,18 @@
       routerLink="/feed"
       routerLinkActive="active-link"
       [routerLinkActiveOptions]="{ exact: true }"
+      (click)="goToFeed()"
       >Articles</a
     >
     <a
       routerLink="/topic"
       routerLinkActive="active-link"
       [routerLinkActiveOptions]="{ exact: true }"
+      (click)="goToTopics()"
       >Thèmes</a
     >
     <a href="#" class="logout-link">Se déconnecter</a>
-    <div class="profile-icon">
+    <div class="profile-icon" (click)="goToProfile()">
       <span>🧑‍🚀</span>
     </div>
   </nav>

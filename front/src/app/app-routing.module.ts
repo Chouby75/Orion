@@ -6,6 +6,8 @@ import { RegisterComponent } from './pages/register/register.component';
 import { MainComponent } from './pages/main/main.component';
 import { FeedComponent } from './components/feed/feed.component';
 import { PostFormComponent } from './components/post-form/post-form.component';
+import { TopicComponent } from './components/topic/topic.component';
+import { PostSpecComponent } from './components/post-spec/post-spec.component';
 
 // consider a guard combined with canLoad / canActivate route option
 // to manage unauthenticated user to access private routes
@@ -14,11 +16,13 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   {
-    path: 'feed',
+    path: 'main',
     component: MainComponent,
     children: [
-      { path: '', component: FeedComponent },
-      { path: 'new', component: PostFormComponent },
+      { path: 'feed', component: FeedComponent },
+      { path: 'feed/new', component: PostFormComponent },
+      { path: 'feed/:id', component: PostSpecComponent },
+      { path: 'topics', component: TopicComponent },
     ],
   },
 ];

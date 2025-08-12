@@ -1,1 +1,25 @@
-<p>topic works!</p>
+<div class="feed-container">
+  <div class="articles-grid">
+    <div class="article-card" *ngFor="let topic of topics">
+      <h3 class="article-title">{{ topic.name }}</h3>
+
+      <p class="article-description">
+        {{ topic.description }}
+      </p>
+      <button
+        class="create-article-btn"
+        *ngIf="!topic.isSubscribed"
+        (click)="subscribe(topic.id)"
+      >
+        S'abonner
+      </button>
+      <button
+        class="create-article-btn"
+        *ngIf="topic.isSubscribed"
+        (click)="unsubscribe(topic.id)"
+      >
+        Se désabonner
+      </button>
+    </div>
+  </div>
+</div>

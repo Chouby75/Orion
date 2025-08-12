@@ -24,7 +24,11 @@ export class FeedComponent implements OnInit {
     );
   }
 
+  public goToArticle(articleId: number): void {
+    this.router.navigate([`main/feed/${articleId}`]);
+  }
+
   createPost(): void {
-    this.router.navigate(['feed/new']);
+    this.router.navigate(['main/feed/new']);
   }
 }
