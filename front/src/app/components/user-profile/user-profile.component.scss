@@ -1,0 +1,357 @@
+// Variables pour une maintenance facile
+$primary-color: #7c5dfa;
+$primary-color-light: #9277ff;
+$secondary-color: #fd5c63;
+$card-bg: #ffffff;
+$page-bg: #f8f8fb;
+$text-color: #0c0e16;
+$text-light: #7e88c3;
+$border-color: #dde2e9;
+$border-radius: 8px;
+$shadow: 0 4px 12px rgba(72, 84, 159, 0.1);
+
+// Style du conteneur principal
+.profile-container {
+  min-height: 100vh;
+  background-color: $page-bg;
+  font-family: "League Spartan", sans-serif;
+}
+
+// Style de l'en-tête
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $card-bg;
+  padding: 16px 24px;
+  box-shadow: $shadow;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .logo {
+    .logo-text {
+      background-color: $primary-color;
+      color: white;
+      padding: 8px 16px;
+      border-radius: $border-radius;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
+
+  .nav-menu {
+    display: flex;
+    gap: 32px;
+
+    .nav-item {
+      font-weight: 500;
+      color: $text-color;
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+
+  .user-avatar {
+    .avatar-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: $primary-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+  }
+
+  .menu-toggle {
+    display: none;
+    cursor: pointer;
+
+    .menu-icon {
+      font-size: 1.5rem;
+      color: $text-color;
+    }
+  }
+}
+
+// Contenu principal
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 40px;
+}
+
+// Section profil utilisateur
+.profile-section {
+  background-color: $card-bg;
+  border-radius: $border-radius;
+  padding: 32px;
+  box-shadow: $shadow;
+  height: fit-content;
+  width: 70%;
+
+  .section-title {
+    font-size: 1.5rem;
+    color: $text-color;
+    margin: 0 0 32px 0;
+    text-align: center;
+  }
+
+  .profile-form {
+    .form-group {
+      margin-bottom: 24px;
+
+      .form-input {
+        width: 100%;
+        padding: 16px;
+        border: 2px solid $border-color;
+        border-radius: $border-radius;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+        }
+
+        &::placeholder {
+          color: $text-light;
+        }
+      }
+    }
+
+    .save-btn {
+      width: 100%;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: $border-radius;
+      padding: 16px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover:not(:disabled) {
+        background-color: $primary-color-light;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// Section abonnements
+.subscriptions-section {
+  .section-title {
+    font-size: 1.5rem;
+    color: $text-color;
+    margin: 0 0 32px 0;
+  }
+
+  .subscriptions-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .subscription-card {
+      background-color: $card-bg;
+      border-radius: $border-radius;
+      padding: 24px;
+      box-shadow: $shadow;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      .subscription-title {
+        font-size: 1.2rem;
+        color: $text-color;
+        margin: 0 0 16px 0;
+      }
+
+      .subscription-description {
+        color: $text-light;
+        line-height: 1.6;
+        margin: 0 0 20px 0;
+        font-size: 0.9rem;
+      }
+
+      .unsubscribe-btn {
+        background-color: $secondary-color;
+        color: white;
+        border: none;
+        border-radius: $border-radius;
+        padding: 12px 24px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: darken($secondary-color, 10%);
+        }
+      }
+    }
+  }
+
+  .no-subscriptions {
+    color: $text-light;
+    text-align: center;
+    font-style: italic;
+    padding: 40px;
+  }
+}
+
+// Sidebar mobile (cachée par défaut)
+.mobile-sidebar {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100vh;
+  background-color: $card-bg;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  padding: 24px;
+  overflow-y: auto;
+
+  .sidebar-header {
+    margin-bottom: 32px;
+
+    .logo-text {
+      background-color: $primary-color;
+      color: white;
+      padding: 8px 16px;
+      border-radius: $border-radius;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
+
+  .sidebar-title {
+    font-size: 1.2rem;
+    color: $text-color;
+    margin: 0 0 20px 0;
+  }
+
+  .sidebar-form {
+    margin-bottom: 32px;
+
+    .sidebar-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid $border-color;
+      border-radius: $border-radius;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
+    }
+
+    .sidebar-save-btn {
+      width: 100%;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: $border-radius;
+      padding: 12px;
+      font-weight: bold;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $primary-color-light;
+      }
+    }
+  }
+
+  .sidebar-subscription {
+    background-color: $page-bg;
+    border-radius: $border-radius;
+    padding: 16px;
+    margin-bottom: 16px;
+
+    .sidebar-subscription-title {
+      font-size: 1rem;
+      color: $text-color;
+      margin: 0 0 8px 0;
+    }
+
+    .sidebar-subscription-desc {
+      font-size: 0.8rem;
+      color: $text-light;
+      margin: 0 0 12px 0;
+      line-height: 1.4;
+    }
+
+    .sidebar-unsubscribe-btn {
+      background-color: $secondary-color;
+      color: white;
+      border: none;
+      border-radius: $border-radius;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darken($secondary-color, 10%);
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .header {
+    .nav-menu {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+  }
+
+  .main-content {
+    grid-template-columns: 1fr;
+    padding: 20px 16px;
+    gap: 24px;
+  }
+
+  .profile-section {
+    padding: 24px;
+  }
+
+  .mobile-sidebar {
+    &.show {
+      display: block;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-sidebar {
+    width: 100vw;
+    right: 0;
+  }
+}

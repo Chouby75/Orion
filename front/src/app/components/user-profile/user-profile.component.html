@@ -1,0 +1,123 @@
+<div class="profile-container">
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <!-- Section Profil utilisateur -->
+    <!-- Dans votre template HTML, remplacez votre section de formulaire par ceci : -->
+
+    <div class="profile-section">
+      <h2 class="section-title">Profil utilisateur</h2>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <form
+        #profileForm="ngForm"
+        class="profile-form"
+        (ngSubmit)="updateProfile()"
+      >
+        <div class="form-group">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            [(ngModel)]="userProfile.username"
+            placeholder="Username"
+            class="form-input"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="userProfile.email"
+            placeholder="email@email.fr"
+            class="form-input"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Mot de passe"
+            class="form-input"
+          />
+        </div>
+        <button
+          type="submit"
+          class="save-btn"
+          [disabled]="!profileForm.form.valid || isLoading"
+        >
+          {{ isLoading ? "Sauvegarde..." : "Sauvegarder" }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Section Abonnements -->
+    <div class="subscriptions-section">
+      <h2 class="section-title">Abonnements</h2>
+
+      <div
+        class="subscriptions-grid"
+        *ngIf="userProfile.topics.length > 0; else noSubscriptions"
+      >
+        <div class="subscription-card" *ngFor="let topic of userProfile.topics">
+          <h3 class="subscription-title">{{ topic.name }}</h3>
+          <p class="subscription-description">
+            {{ topic.description }}
+          </p>
+          <button class="unsubscribe-btn" (click)="unsubscribe(topic.id)">
+            Se désabonner
+          </button>
+        </div>
+      </div>
+
+      <ng-template #noSubscriptions>
+        <p class="no-subscriptions">Aucun abonnement pour le moment.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Sidebar mobile (version responsive) -->
+  <div class="mobile-sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-text">MDD</span>
+      </div>
+    </div>
+
+    <div class="sidebar-profile">
+      <h3 class="sidebar-title">Profil utilisateur</h3>
+
+      <form class="sidebar-form">
+        <input type="text" placeholder="Username" class="sidebar-input" />
+        <input
+          type="email"
+          placeholder="email@email.fr"
+          class="sidebar-input"
+        />
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          class="sidebar-input"
+        />
+        <button type="submit" class="sidebar-save-btn">Sauvegarder</button>
+      </form>
+    </div>
+
+    <div class="sidebar-subscriptions">
+      <h3 class="sidebar-title">Abonnements</h3>
+
+      <div class="sidebar-subscription" *ngFor="let topic of subscribedTopics">
+        <h4 class="sidebar-subscription-title">{{ topic.name }}</h4>
+        <p class="sidebar-subscription-desc">{{ topic.description }}</p>
+        <button class="sidebar-unsubscribe-btn">Se désabonner</button>
+      </div>
+    </div>
+  </div>
+</div>

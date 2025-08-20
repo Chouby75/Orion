@@ -23,6 +23,7 @@ import { FeedComponent } from './components/feed/feed.component';
 import { PostFormComponent } from './components/post-form/post-form.component';
 import { TopicComponent } from './components/topic/topic.component';
 import { PostSpecComponent } from './components/post-spec/post-spec.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { PostSpecComponent } from './components/post-spec/post-spec.component';
     PostFormComponent,
     TopicComponent,
     PostSpecComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,

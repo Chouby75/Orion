@@ -18,6 +18,7 @@ public class TopicsMapper {
         topicsToReturn.setId(topicsEntity.getId());
         topicsToReturn.setName(topicsEntity.getName());
         topicsToReturn.setDescription(topicsEntity.getDescription());
+        topicsToReturn.setIsSubscribed(null);
 
         return topicsToReturn;
     }

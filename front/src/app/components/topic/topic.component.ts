@@ -27,8 +27,7 @@ export class TopicComponent implements OnInit {
   subscribe(topicId: number): void {
     this.topicService.subscribeToTopic(topicId).subscribe(
       (response) => {
-        console.log('Subscription successful:', response);
-        // Optionally, you can refresh the topics list or show a success message
+        this.ngOnInit();
       },
       (error) => {
         console.error('Subscription failed:', error);
@@ -39,7 +38,7 @@ export class TopicComponent implements OnInit {
   unsubscribe(topicId: number): void {
     this.topicService.unsubscribeFromTopic(topicId).subscribe(
       (response) => {
-        console.log('Unsubscription successful:', response);
+        this.ngOnInit();
         // Optionally, you can refresh the topics list or show a success message
       },
       (error) => {

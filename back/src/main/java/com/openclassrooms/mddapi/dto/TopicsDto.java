@@ -5,14 +5,16 @@ public class TopicsDto {
     private Long id;
     private String name;
     private String description;
+    private Boolean isSubscribed;
 
     public TopicsDto() {
     }
 
-    public TopicsDto(Long id, String name, String description) {
+    public TopicsDto(Long id, String name, String description, Boolean isSubscribed) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.isSubscribed = isSubscribed;
     }
 
     public Long getId() {
@@ -37,5 +39,13 @@ public class TopicsDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getIsSubscribed() {
+        return isSubscribed;
+    }
+    
+    public void setIsSubscribed(Boolean isSubscribed) {
+        this.isSubscribed = isSubscribed;
     }
 }

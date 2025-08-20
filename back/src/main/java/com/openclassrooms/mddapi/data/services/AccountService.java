@@ -45,7 +45,7 @@ public class AccountService {
         userDetails.setUsername(userEntity.getUsername());
         userDetails.setEmail(userEntity.getEmail());
         userDetails.setTopics(userEntity.getSubscriptions().stream()
-            .map(topic -> new TopicsDto(topic.getId(), topic.getName(), topic.getDescription()))
+            .map(topic -> new TopicsDto(topic.getId(), topic.getName(), topic.getDescription(), true))
             .collect(Collectors.toSet()));
 
         return userDetails;

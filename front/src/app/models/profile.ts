@@ -4,7 +4,7 @@ export interface Profile {
   id: number;
   username: string;
   email: string;
-  subscribedTopics: Topic[];
+  topics: Topic[];
 }
 
 export interface ProfileUpdate {
