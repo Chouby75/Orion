@@ -34,4 +34,9 @@ export class HeaderComponent implements OnInit {
   goToProfile(): void {
     this.router.navigate(['main/profile']);
   }
+
+  logout(): void {
+    localStorage.removeItem('auth_token');
+    this.router.navigate(['']);
+  }
 }

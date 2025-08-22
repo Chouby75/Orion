@@ -1,4 +1,5 @@
 package com.openclassrooms.mddapi.data.services;
+
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mddapi.data.entity.UserEntity;
@@ -12,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
-    
+
     private final UserRepo userRepository; // Assume UserRepository is defined elsewhere
     private final PasswordEncoder passwordEncoder; // Assume PasswordEncoder is defined elsewhere
 
@@ -42,8 +43,13 @@ public class UserService {
     }
 
     public tokenDto loginUser(UserInputDto user) {
+
         Optional<UserEntity> existingUser = userRepository.findByUsername(user.getUsername());
-        if (!existingUser.isPresent() || !passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
+        if (!existingUser.isPresent()) {
+            existingUser = userRepository.findByEmail(user.getUsername());
+        }
+        if (!existingUser.isPresent()
+                || !passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
             return new tokenDto("Invalid username or password");
         }
 

@@ -6,6 +6,8 @@ import com.openclassrooms.mddapi.data.repo.UserRepo;
 
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,13 +22,14 @@ public class AccountService {
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
-    
+
     public AccountService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
-    
+
     // Example method to get user details
+    @Transactional
     public AccountDetailDto getUserDetails(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new IllegalArgumentException("User is not authenticated");
@@ -45,12 +48,12 @@ public class AccountService {
         userDetails.setUsername(userEntity.getUsername());
         userDetails.setEmail(userEntity.getEmail());
         userDetails.setTopics(userEntity.getSubscriptions().stream()
-            .map(topic -> new TopicsDto(topic.getId(), topic.getName(), topic.getDescription(), true))
-            .collect(Collectors.toSet()));
+                .map(topic -> new TopicsDto(topic.getId(), topic.getName(), topic.getDescription(), true))
+                .collect(Collectors.toSet()));
 
         return userDetails;
     }
-    
+
     // Example method to update user details
     public Boolean updateUserDetails(Authentication authentication, AccountUpdateDto userDetails) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -67,23 +70,33 @@ public class AccountService {
         UserEntity userEntity = userRepo.findByUsername(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
 
-        if (!userDetails.getUsername().equals(userEntity.getUsername())) {
-            if (userRepo.findByUsername(userDetails.getUsername()).isPresent()) {
-                throw new IllegalArgumentException("Username already exists");
+        // 5. Mise à jour conditionnelle du username
+        if (userDetails.getUsername() != null && !userDetails.getUsername().trim().isEmpty()) {
+            if (!userDetails.getUsername().equals(userEntity.getUsername())) {
+                if (userRepo.findByUsername(userDetails.getUsername()).isPresent()) {
+                    throw new IllegalArgumentException("Username already exists");
+                }
+                userEntity.setUsername(userDetails.getUsername());
             }
-            userEntity.setUsername(userDetails.getUsername());
         }
-        if (!userDetails.getEmail().equals(userEntity.getEmail())) {
-            if (userRepo.findByEmail(userDetails.getEmail()).isPresent()) {
-                throw new IllegalArgumentException("Email already exists");
+
+        // 6. Mise à jour conditionnelle de l'email
+        if (userDetails.getEmail() != null && !userDetails.getEmail().trim().isEmpty()) {
+            if (!userDetails.getEmail().equals(userEntity.getEmail())) {
+                if (userRepo.findByEmail(userDetails.getEmail()).isPresent()) {
+                    throw new IllegalArgumentException("Email already exists");
+                }
+                userEntity.setEmail(userDetails.getEmail());
             }
-            userEntity.setEmail(userDetails.getEmail());
         }
+
+        // 7. Mise à jour conditionnelle du mot de passe
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
             userEntity.setPassword(passwordEncoder.encode(userDetails.getPassword()));
         }
+
         UserEntity userSave = userRepo.save(userEntity);
         return userSave != null;
     }
-    
+
 }

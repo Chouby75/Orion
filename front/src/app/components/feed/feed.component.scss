@@ -43,15 +43,29 @@ $shadow: 0 10px 15px -3px rgba(72, 84, 159, 0.1);
 
 // --- Style du contrôle de tri ---
 .sort-control {
-  display: flex;
-  align-items: center;
-  gap: 8px; // Espace entre "Trier par" et la flèche
-  font-weight: bold;
-  color: $text-color;
-  cursor: pointer;
+  .sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.2s ease;
 
-  .sort-icon {
-    color: $primary-color; // Flèche en couleur primaire
+    &:hover {
+      background-color: #f5f5f5;
+      border-color: #999;
+    }
+
+    .sort-arrow {
+      font-weight: bold;
+      font-size: 16px;
+      transition: transform 0.2s ease;
+    }
   }
 }
 

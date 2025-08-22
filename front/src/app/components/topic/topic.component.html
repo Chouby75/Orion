@@ -8,17 +8,10 @@
       </p>
       <button
         class="create-article-btn"
-        *ngIf="!topic.isSubscribed"
         (click)="subscribe(topic.id)"
+        disabled="topic.isSubscribed"
       >
-        S'abonner
-      </button>
-      <button
-        class="create-article-btn"
-        *ngIf="topic.isSubscribed"
-        (click)="unsubscribe(topic.id)"
-      >
-        Se désabonner
+        {{ topic.isSubscribed ? "Déjà abonné" : "S'abonner" }}
       </button>
     </div>
   </div>

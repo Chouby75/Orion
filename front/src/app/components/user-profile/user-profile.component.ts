@@ -5,7 +5,8 @@ import { AccountService } from '../../services/account.service';
 // IMPORTE TES INTERFACES (ajuste les chemins selon ta structure)
 import { Profile } from '../../models/profile';
 import { Topic } from '../../models/topic';
-import { TopicService } from '../../services/topic.service'; // IMPORTE TON SERVICE (ajuste le chemin)
+import { TopicService } from '../../services/topic.service';
+import { ProfileUpdate } from '../../models/profile';
 
 @Component({
   selector: 'app-user-profile',
@@ -20,10 +21,19 @@ export class UserProfileComponent implements OnInit {
     topics: [],
   };
 
-  public userProfileForm: any = {
+  // Nouveau: objet séparé pour le formulaire
+  public formData = {
     username: '',
     email: '',
     password: '',
+  };
+
+  // Garder une copie des données originales pour comparaison
+  private originalProfile: Profile = {
+    id: 0,
+    username: '',
+    email: '',
+    topics: [],
   };
 
   public subscribedTopics: Topic[] = [];
@@ -38,7 +48,6 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserProfile();
-    // this.loadSubscribedTopics();
   }
 
   /**
@@ -53,7 +62,18 @@ export class UserProfileComponent implements OnInit {
           username: data.username,
           email: data.email,
           topics: data.topics || [],
-        }; // Ne pas afficher le mot de passe
+        };
+
+        // Sauvegarder les données originales
+        this.originalProfile = { ...this.userProfile };
+
+        // Initialiser le formulaire avec les données actuelles
+        this.formData = {
+          username: data.username,
+          email: data.email,
+          password: '',
+        };
+
         this.isLoading = false;
       },
       (error) => {
@@ -68,7 +88,6 @@ export class UserProfileComponent implements OnInit {
     this.topicService.unsubscribeFromTopic(topicId).subscribe(
       (response) => {
         this.ngOnInit();
-        // Optionally, you can refresh the topics list or show a success message
       },
       (error) => {
         console.error('Unsubscription failed:', error);
@@ -77,48 +96,61 @@ export class UserProfileComponent implements OnInit {
   }
 
   /**
-   * Met à jour le profil utilisateur
+   * Met à jour le profil utilisateur avec seulement les champs modifiés
    */
   updateProfile(): void {
-    if (this.isFormValid()) {
-      this.isLoading = true;
-      this.errorMessage = '';
+    this.isLoading = true;
+    this.errorMessage = '';
 
-      this.userService.updateUserProfile(this.userProfile).subscribe(
-        (response) => {
-          console.log('Profil mis à jour avec succès:', response);
-          this.isLoading = false;
-          // Recharger le profil pour avoir les données à jour
-          this.loadUserProfile();
-        },
-        (error) => {
-          console.error('Erreur lors de la mise à jour du profil:', error);
-          this.errorMessage = 'Erreur lors de la mise à jour du profil';
-          this.isLoading = false;
-        }
-      );
-    } else {
-      this.errorMessage = 'Veuillez remplir correctement tous les champs';
+    // Construire l'objet ProfileUpdate avec seulement les champs modifiés
+    const profileUpdate: ProfileUpdate = this.buildUpdateObject();
+
+    // Vérifier s'il y a des changements
+    if (Object.keys(profileUpdate).length === 0) {
+      this.errorMessage = 'Aucune modification détectée';
+      this.isLoading = false;
+      return;
     }
-  }
 
-  /**
-   * Vérifie si le formulaire est valide
-   */
-  private isFormValid(): boolean {
-    return !!(
-      this.userProfile.username?.trim() &&
-      this.userProfile.email?.trim() &&
-      this.isValidEmail(this.userProfile.email)
+    this.userService.updateUserProfile(profileUpdate).subscribe(
+      (response) => {
+        console.log('Profil mis à jour avec succès:', response);
+        this.isLoading = false;
+        // Recharger le profil pour avoir les données à jour
+        this.loadUserProfile();
+        // Réinitialiser le champ mot de passe
+        this.formData.password = '';
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour du profil:', error);
+        this.errorMessage = 'Erreur lors de la mise à jour du profil';
+        this.isLoading = false;
+      }
     );
   }
 
   /**
-   * Vérifie si l'email est valide
+   * Construit l'objet ProfileUpdate avec seulement les champs modifiés
    */
-  private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  private buildUpdateObject(): ProfileUpdate {
+    const updateObject: ProfileUpdate = {};
+
+    // Vérifier si le username a changé
+    if (this.formData.username.trim() !== this.originalProfile.username) {
+      updateObject.username = this.formData.username.trim();
+    }
+
+    // Vérifier si l'email a changé
+    if (this.formData.email.trim() !== this.originalProfile.email) {
+      updateObject.email = this.formData.email.trim();
+    }
+
+    // Vérifier si un mot de passe a été saisi
+    if (this.formData.password.trim() !== '') {
+      updateObject.password = this.formData.password.trim();
+    }
+
+    return updateObject;
   }
 
   /**

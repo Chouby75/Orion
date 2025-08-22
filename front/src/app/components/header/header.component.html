@@ -1,5 +1,5 @@
 <header class="header-container">
-  <a routerLink="/" class="logo"
+  <a routerLink="/feed" class="logo"
     ><img class="logo" src="/assets/logo_p6.png"
   /></a>
 
@@ -18,7 +18,7 @@
       (click)="goToTopics()"
       >Thèmes</a
     >
-    <a href="#" class="logout-link">Se déconnecter</a>
+    <a class="logout-link" (click)="logout()">Se déconnecter</a>
     <div class="profile-icon" (click)="goToProfile()">
       <span>🧑‍🚀</span>
     </div>

@@ -2,16 +2,12 @@
   <!-- Contenu principal -->
   <div class="main-content">
     <!-- Section Profil utilisateur -->
-    <!-- Dans votre template HTML, remplacez votre section de formulaire par ceci : -->
-
     <div class="profile-section">
       <h2 class="section-title">Profil utilisateur</h2>
-
       <!-- Message d'erreur -->
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
-
       <form
         #profileForm="ngForm"
         class="profile-form"
@@ -22,7 +18,7 @@
             type="text"
             id="username"
             name="username"
-            [(ngModel)]="userProfile.username"
+            [(ngModel)]="formData.username"
             placeholder="Username"
             class="form-input"
             required
@@ -33,7 +29,7 @@
             type="email"
             id="email"
             name="email"
-            [(ngModel)]="userProfile.email"
+            [(ngModel)]="formData.email"
             placeholder="email@email.fr"
             class="form-input"
             required
@@ -44,7 +40,8 @@
             type="password"
             id="password"
             name="password"
-            placeholder="Mot de passe"
+            [(ngModel)]="formData.password"
+            placeholder="Nouveau mot de passe (optionnel)"
             class="form-input"
           />
         </div>
@@ -57,11 +54,9 @@
         </button>
       </form>
     </div>
-
     <!-- Section Abonnements -->
     <div class="subscriptions-section">
       <h2 class="section-title">Abonnements</h2>
-
       <div
         class="subscriptions-grid"
         *ngIf="userProfile.topics.length > 0; else noSubscriptions"
@@ -76,13 +71,11 @@
           </button>
         </div>
       </div>
-
       <ng-template #noSubscriptions>
         <p class="no-subscriptions">Aucun abonnement pour le moment.</p>
       </ng-template>
     </div>
   </div>
-
   <!-- Sidebar mobile (version responsive) -->
   <div class="mobile-sidebar">
     <div class="sidebar-header">
@@ -90,33 +83,56 @@
         <span class="logo-text">MDD</span>
       </div>
     </div>
-
     <div class="sidebar-profile">
       <h3 class="sidebar-title">Profil utilisateur</h3>
-
-      <form class="sidebar-form">
-        <input type="text" placeholder="Username" class="sidebar-input" />
+      <form
+        class="sidebar-form"
+        #sidebarForm="ngForm"
+        (ngSubmit)="updateProfile()"
+      >
+        <input
+          type="text"
+          placeholder="Username"
+          class="sidebar-input"
+          [(ngModel)]="formData.username"
+          name="sidebarUsername"
+          required
+        />
         <input
           type="email"
           placeholder="email@email.fr"
           class="sidebar-input"
+          [(ngModel)]="formData.email"
+          name="sidebarEmail"
+          required
         />
         <input
           type="password"
-          placeholder="Mot de passe"
+          placeholder="Nouveau mot de passe (optionnel)"
           class="sidebar-input"
+          [(ngModel)]="formData.password"
+          name="sidebarPassword"
         />
-        <button type="submit" class="sidebar-save-btn">Sauvegarder</button>
+        <button
+          type="submit"
+          class="sidebar-save-btn"
+          [disabled]="!sidebarForm.form.valid || isLoading"
+        >
+          {{ isLoading ? "Sauvegarde..." : "Sauvegarder" }}
+        </button>
       </form>
     </div>
-
     <div class="sidebar-subscriptions">
       <h3 class="sidebar-title">Abonnements</h3>
-
-      <div class="sidebar-subscription" *ngFor="let topic of subscribedTopics">
+      <div
+        class="sidebar-subscription"
+        *ngFor="let topic of userProfile.topics"
+      >
         <h4 class="sidebar-subscription-title">{{ topic.name }}</h4>
         <p class="sidebar-subscription-desc">{{ topic.description }}</p>
-        <button class="sidebar-unsubscribe-btn">Se désabonner</button>
+        <button class="sidebar-unsubscribe-btn" (click)="unsubscribe(topic.id)">
+          Se désabonner
+        </button>
       </div>
     </div>
   </div>

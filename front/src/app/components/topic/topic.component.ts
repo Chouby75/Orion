@@ -34,16 +34,4 @@ export class TopicComponent implements OnInit {
       }
     );
   }
-
-  unsubscribe(topicId: number): void {
-    this.topicService.unsubscribeFromTopic(topicId).subscribe(
-      (response) => {
-        this.ngOnInit();
-        // Optionally, you can refresh the topics list or show a success message
-      },
-      (error) => {
-        console.error('Unsubscription failed:', error);
-      }
-    );
-  }
 }

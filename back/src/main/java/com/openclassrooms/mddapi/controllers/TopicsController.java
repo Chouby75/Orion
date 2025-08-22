@@ -1,7 +1,9 @@
 package com.openclassrooms.mddapi.controllers;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.openclassrooms.mddapi.data.entity.UserEntity;
 import com.openclassrooms.mddapi.data.repo.UserRepo;
@@ -10,12 +12,10 @@ import com.openclassrooms.mddapi.dto.MessageToReturn;
 import com.openclassrooms.mddapi.dto.TopicsDto;
 import java.util.Set;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
-
-
 
 @RequestMapping("/topics")
 @RestController
@@ -36,7 +36,8 @@ public class TopicsController {
         if (username == null) {
             return null;
         }
-        UserEntity user = userRepo.findByUsername(username).get();
+        UserEntity user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return topicService.getTopics(user);
     }
 
@@ -49,7 +50,7 @@ public class TopicsController {
         Long userId = userRepo.findByUsername(username).get().getId();
         Boolean result = topicService.subscribeToTopic(topicId, userId);
         MessageToReturn response = new MessageToReturn(null);
-        if(result){
+        if (result) {
             response.setMessage("Subscription successful");
         } else {
             response.setMessage("Subscription failed");
@@ -66,12 +67,12 @@ public class TopicsController {
         Long userId = userRepo.findByUsername(username).get().getId();
         Boolean result = topicService.unsubscribeFromTopic(topicId, userId);
         MessageToReturn response = new MessageToReturn(null);
-        if(result){
+        if (result) {
             response.setMessage("Unsubscription successful");
         } else {
             response.setMessage("Unsubscription failed");
         }
         return response;
     }
-    
+
 }

@@ -4,10 +4,14 @@
       Créer un article
     </button>
     <div class="sort-control">
-      <span>Trier par ↓</span>
+      <button class="sort-btn" (click)="toggleSort()">
+        <span>Trier par</span>
+        <span class="sort-arrow" [ngClass]="sortDirection">
+          {{ sortDirection === "desc" ? "↓" : "↑" }}
+        </span>
+      </button>
     </div>
   </div>
-
   <div class="articles-grid">
     <div
       class="article-card"
@@ -15,14 +19,12 @@
       (click)="goToArticle(article.id)"
     >
       <h3 class="article-title">{{ article.title }}</h3>
-
       <div class="article-meta">
         <span class="article-date">{{
           article.createdAt | date : "dd/MM/yyyy"
         }}</span>
         <span class="article-author">{{ article.author }}</span>
       </div>
-
       <p class="article-description">
         {{ article.content }}
       </p>

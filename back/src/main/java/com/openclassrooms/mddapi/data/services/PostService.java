@@ -1,4 +1,5 @@
 package com.openclassrooms.mddapi.data.services;
+
 import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.data.repo.PostRepo;
 import com.openclassrooms.mddapi.data.entity.CommentEntity;
@@ -28,15 +29,15 @@ public class PostService {
         this.postRepo = postRepo;
         this.topicsRepo = topicsRepo;
     }
-    
+
     public Boolean createPost(PostDto post) {
 
-        if(post.getTitle() == null){
+        if (post.getTitle() == null) {
             return false;
         }
 
         Set<TopicsSummarizeDto> topicsdto = post.getTopics();
-    
+
         if (topicsdto == null || topicsdto.isEmpty()) {
             return false;
         }
@@ -47,50 +48,50 @@ public class PostService {
                 .collect(Collectors.toSet())).forEach(topicsSet::add);
 
         PostEntity postEntity = new PostEntity();
-            postEntity.setTitle(post.getTitle());
-            postEntity.setContent(post.getContent());
-            postEntity.setAuthor(post.getAuthor());
-            postEntity.setTopics(topicsSet);
-            
+        postEntity.setTitle(post.getTitle());
+        postEntity.setContent(post.getContent());
+        postEntity.setAuthor(post.getAuthor());
+        postEntity.setTopics(topicsSet);
 
-            PostEntity save = postRepo.save(postEntity);
-            
+        PostEntity save = postRepo.save(postEntity);
+
         return save.getId() != null;
     }
 
     public List<PostSummarizeDto> getFeed() {
         return StreamSupport.stream(postRepo.findAll().spliterator(), false)
+                .sorted((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()))
                 .map(PostMapper::mapToPostSummarizeDto)
                 .collect(Collectors.toList());
     }
 
     public Boolean postComment(Long id, CommentDto comment) {
-    try {
-        PostEntity post = postRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post non trouvé !"));
-        
-        CommentEntity newComment = new CommentEntity();
-        newComment.setContent(comment.getContent());
-        newComment.setAuthor(comment.getAuthor());
+        try {
+            PostEntity post = postRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Post non trouvé !"));
 
-        post.addComment(newComment);
-        
-        PostEntity postSaved = postRepo.save(post);
-        return true;
+            CommentEntity newComment = new CommentEntity();
+            newComment.setContent(comment.getContent());
+            newComment.setAuthor(comment.getAuthor());
 
-    } catch (Exception e) {
-        return false;
+            post.addComment(newComment);
+
+            PostEntity postSaved = postRepo.save(post);
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
-}
 
-    public PostDto getPostById(Long id){
+    public PostDto getPostById(Long id) {
         Optional<PostEntity> postOptional = postRepo.findById(id);
         if (postOptional.isEmpty()) {
             return null; // or throw an exception if preferred
         }
 
         PostDto postDtoById = PostMapper.mapToDto(postOptional.get());
-        
+
         return postDtoById;
     }
 
