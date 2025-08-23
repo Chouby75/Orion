@@ -1,25 +1,91 @@
-# P6-Full-Stack-reseau-dev
+# P6 - Projet Full-Stack
 
-## Front
+Ce dépôt contient le code source d'une application web Full-Stack développée dans le cadre du projet P6.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.3.
+> [Ajoutez ici une brève description du projet, de ses objectifs et de ses fonctionnalités principales.]
 
-Don't forget to install your node_modules before starting (`npm install`).
+## Table des matières
 
-### Development server
+- [Technologies](#technologies)
+- [Prérequis](#prérequis)
+- [Installation](#installation)
+  - [Partie Backend (Spring)](#partie-backend-spring)
+  - [Partie Frontend (Angular)](#partie-frontend-angular)
+- [Scripts utiles](#scripts-utiles)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Technologies
 
-### Build
+L'application est construite avec les technologies suivantes :
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **Frontend** : Angular (v14.1.3)
+- **Backend** : Spring Boot (Java)
+- **Base de données** : MySQL
 
-### Where to start
+## Prérequis
 
-As you may have seen if you already started the app, a simple home page containing a logo, a title and a button is available. If you take a look at its code (in the `home.component.html`) you will see that an external UI library is already configured in the project.
+Avant de procéder à l'installation, assurez-vous que les outils suivants sont installés sur votre système :
 
-This library is `@angular/material`, it's one of the most famous in the angular ecosystem. As you can see on their docs (https://material.angular.io/), it contains a lot of highly customizable components that will help you design your interfaces quickly.
+- Node.js et npm
+- Angular CLI
+- JDK 11 ou une version supérieure
+- Un serveur MySQL fonctionnel
 
-Note: I recommend to use material however it's not mandatory, if you prefer you can get rid of it.
+## Installation
 
-Good luck!
+Suivez ces étapes pour configurer et lancer le projet en local.
+
+### Partie Backend (Spring)
+
+1.  **Créer la base de données**
+    Connectez-vous à votre client MySQL et exécutez la requête suivante :
+
+    ```sql
+    CREATE DATABASE mdd_api;
+    ```
+
+2.  **Configurer la connexion**
+    Dans le répertoire du backend, accédez au fichier `src/main/resources/application.properties`. Renseignez les informations de connexion à votre base de données :
+
+    ```properties
+    # Port du serveur backend
+    server.port=3001
+
+    # Configuration de la source de données MySQL
+    spring.datasource.url=jdbc:mysql://localhost:3306/mdd_api
+    spring.datasource.username=VOTRE_USERNAME_SQL
+    spring.datasource.password=VOTRE_MOT_DE_PASSE_SQL
+
+    # Configuration Hibernate
+    spring.jpa.hibernate.ddl-auto=update
+    ```
+
+    _Remplacez `VOTRE_USERNAME_SQL` et `VOTRE_MOT_DE_PASSE_SQL` par vos identifiants._
+
+3.  **Lancer le serveur**
+    Démarrez l'application Spring Boot via votre IDE (ex: IntelliJ, Eclipse) ou en utilisant le terminal avec Maven ou Gradle. Le serveur sera accessible à l'adresse `http://localhost:3001`.
+
+### Partie Frontend (Angular)
+
+1.  **Accéder au répertoire**
+    Ouvrez un terminal et naviguez jusqu'au dossier racine du projet frontend.
+
+2.  **Installer les dépendances**
+    Exécutez la commande suivante pour installer tous les packages requis :
+
+    ```bash
+    npm install
+    ```
+
+3.  **Démarrer le serveur de développement**
+    Lancez le serveur avec la commande :
+    ```bash
+    ng serve
+    ```
+    L'application sera alors disponible à l'adresse `http://localhost:4200/`.
+
+## Scripts utiles
+
+Les scripts suivants sont disponibles pour la gestion du projet frontend :
+
+- `ng serve` : Démarre le serveur de développement local.
+- `ng build` : Compile l'application pour un environnement de production. Les fichiers sont générés dans le répertoire `dist/`.

@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.data.services;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,6 @@ public class TopicService {
         topicsEntities.forEach(topicsSet::add);
         Set<TopicsDto> topicsDto = topicsSet.stream()
                 .map(TopicsMapper::mapToDto)
-                .sorted((t1, t2) -> t1.getName().compareToIgnoreCase(t2.getName()))
                 .collect(Collectors.toSet());
 
         Set<Long> subscribedTopicIds = user.getSubscriptions().stream()
@@ -43,7 +43,9 @@ public class TopicService {
             dto.setIsSubscribed(subscribedTopicIds.contains(dto.getId()));
         });
 
-        return topicsDto;
+        return topicsDto.stream()
+            .sorted((t1, t2) -> t1.getId().compareTo(t2.getId()))
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public Boolean subscribeToTopic(Long topicId, Long userId) {
