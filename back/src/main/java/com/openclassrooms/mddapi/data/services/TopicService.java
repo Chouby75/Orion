@@ -32,6 +32,7 @@ public class TopicService {
         topicsEntities.forEach(topicsSet::add);
         Set<TopicsDto> topicsDto = topicsSet.stream()
                 .map(TopicsMapper::mapToDto)
+                .sorted((t1, t2) -> t1.getName().compareToIgnoreCase(t2.getName()))
                 .collect(Collectors.toSet());
 
         Set<Long> subscribedTopicIds = user.getSubscriptions().stream()

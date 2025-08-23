@@ -2,7 +2,6 @@
   <header class="app-header">
     <img src="/assets/logo_p6.png" alt="MDD Logo" class="mdd-logo" />
   </header>
-
   <div class="content-wrapper">
     <button mat-icon-button (click)="goBack()" class="arrow-back">
       <mat-icon>arrow_back</mat-icon>
@@ -10,6 +9,19 @@
     <div class="header-section">
       <h1 class="page-title">Se Connecter</h1>
     </div>
+
+    <!-- Message d'erreur de connexion -->
+    <mat-error *ngIf="loginError" class="login-error-message">
+      <mat-icon>error</mat-icon>
+      {{ loginError }}
+      <button
+        mat-icon-button
+        (click)="clearLoginError()"
+        class="close-error-btn"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-error>
 
     <form
       [formGroup]="loginForm"
@@ -23,16 +35,34 @@
           placeholder="Ex: JohnDoe"
           required
           formControlName="username"
+          (focus)="clearLoginError()"
         />
+        <mat-error *ngIf="hasFieldError('username')">
+          {{ getFieldErrorMessage("username") }}
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Mot de passe</mat-label>
-        <input matInput type="password" required formControlName="password" />
+        <input
+          matInput
+          type="password"
+          required
+          formControlName="password"
+          (focus)="clearLoginError()"
+        />
+        <mat-error *ngIf="hasFieldError('password')">
+          {{ getFieldErrorMessage("password") }}
+        </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button class="register-button" type="submit">
-        Se connecter
+      <button
+        mat-raised-button
+        class="register-button"
+        type="submit"
+        [disabled]="isLoading"
+      >
+        {{ isLoading ? "Connexion..." : "Se connecter" }}
       </button>
     </form>
   </div>

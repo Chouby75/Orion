@@ -9,7 +9,7 @@
       <button
         class="create-article-btn"
         (click)="subscribe(topic.id)"
-        disabled="topic.isSubscribed"
+        [disabled]="topic.isSubscribed"
       >
         {{ topic.isSubscribed ? "Déjà abonné" : "S'abonner" }}
       </button>
