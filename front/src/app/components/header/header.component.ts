@@ -15,6 +15,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  get isProfileActive(): boolean {
+    return this.router.url.includes('/profile');
+  }
+
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
@@ -24,14 +28,17 @@ export class HeaderComponent implements OnInit {
   }
 
   goToFeed(): void {
+    this.closeMenu();
     this.router.navigate(['main/feed']);
   }
 
   goToTopics(): void {
+    this.closeMenu();
     this.router.navigate(['main/topics']);
   }
 
   goToProfile(): void {
+    this.closeMenu();
     this.router.navigate(['main/profile']);
   }
 

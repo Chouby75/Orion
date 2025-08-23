@@ -1,6 +1,7 @@
+<!-- HTML Template -->
 <div class="form-container">
   <div class="header">
-    <button mat-icon-button (click)="back()">
+    <button class="back-btn" (click)="back()">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1>Créer un nouvel article</h1>
@@ -15,7 +16,12 @@
           {{ theme.name }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="postForm.get('topics')?.hasError('required')">
+      <mat-error
+        *ngIf="
+          postForm.get('topics')?.hasError('required') &&
+          postForm.get('topics')?.touched
+        "
+      >
         Au moins un thème est obligatoire.
       </mat-error>
     </mat-form-field>
@@ -28,7 +34,12 @@
         formControlName="title"
         placeholder="Le titre de votre super article"
       />
-      <mat-error *ngIf="postForm.get('title')?.hasError('required')">
+      <mat-error
+        *ngIf="
+          postForm.get('title')?.hasError('required') &&
+          postForm.get('title')?.touched
+        "
+      >
         Le titre est obligatoire.
       </mat-error>
     </mat-form-field>
@@ -42,7 +53,12 @@
         placeholder="Écrivez votre contenu ici..."
         rows="6"
       ></textarea>
-      <mat-error *ngIf="postForm.get('content')?.hasError('required')">
+      <mat-error
+        *ngIf="
+          postForm.get('content')?.hasError('required') &&
+          postForm.get('content')?.touched
+        "
+      >
         Le contenu est obligatoire.
       </mat-error>
     </mat-form-field>

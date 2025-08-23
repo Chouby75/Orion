@@ -1,10 +1,12 @@
-// Variables pour les couleurs, comme ça tu changes tout d'un coup !
-$primary-color: #704de6; // Un violet qui ressemble à ta maquette
-$active-color: #5a38c2; // Une version plus foncée pour le lien actif
+// Variables pour les couleurs
+$primary-color: #704de6;
+$active-color: #5a38c2;
 $logout-color: #d9534f;
 $text-color: #333;
 $border-color: #e0e0e0;
 $background-light: #f8f9fa;
+$white: #ffffff;
+$shadow-color: rgba(0, 0, 0, 0.15);
 
 // Conteneur principal du header
 .header-container {
@@ -13,7 +15,9 @@ $background-light: #f8f9fa;
   align-items: center;
   padding: 1rem 2rem;
   border-bottom: 1px solid $border-color;
-  position: relative; // Important pour positionner le menu mobile
+  position: relative;
+  background-color: $white;
+  z-index: 1000;
 }
 
 // Style du logo
@@ -21,7 +25,7 @@ $background-light: #f8f9fa;
   height: 100px;
 }
 
-// --- Styles pour la vue Ordinateur ---
+// --- Styles pour la vue Desktop ---
 .desktop-nav {
   display: flex;
   align-items: center;
@@ -31,108 +35,285 @@ $background-light: #f8f9fa;
     text-decoration: none;
     color: $text-color;
     font-size: 1.1rem;
-    padding: 5px;
-    transition: color 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
 
     &:hover {
       color: $primary-color;
+      background-color: rgba($primary-color, 0.1);
     }
   }
 
-  // Le fameux style pour le lien actif !
   .active-link {
     color: $primary-color;
-    font-weight: 600;
   }
 
   .logout-link {
     color: $logout-color;
+
+    &:hover {
+      color: darken($logout-color, 10%);
+      background-color: rgba($logout-color, 0.1);
+      cursor: pointer;
+    }
   }
 }
 
-.profile-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #e9ecef;
+// Nouveau style pour le bouton profil
+.profile-btn {
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
+  justify-content: center;
+  background: none;
+  border: 2px solid $border-color;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+
+  &:hover {
+    border-color: $primary-color;
+    background-color: rgba($primary-color, 0.05);
+    color: $primary-color;
+  }
+
+  &.active {
+    border-color: $primary-color;
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+  }
+
+  .profile-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 // --- Styles pour la vue Mobile ---
-
-// On cache le bouton hamburger par défaut
 .hamburger-menu {
   display: none;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   cursor: pointer;
   background: none;
   border: none;
+  padding: 8px;
+  z-index: 1001;
 
   span {
     display: block;
     width: 25px;
     height: 3px;
     background-color: $text-color;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+  }
+
+  &.active {
+    span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+    span:nth-child(2) {
+      opacity: 0;
+    }
+    span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
   }
 }
 
-// On cache aussi le menu mobile par défaut
-.mobile-nav {
-  display: none;
+// Overlay pour fermer le menu
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+
+  &.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
-// On utilise les Media Queries : si l'écran fait 768px de large ou moins...
+// Sidebar mobile
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: $white;
+  box-shadow: -4px 0 20px $shadow-color;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1001;
+  flex-direction: column;
+
+  &.is-open {
+    transform: translateX(0);
+  }
+
+  .mobile-nav-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    border-bottom: 1px solid $border-color;
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: $text-color;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $background-light;
+      }
+    }
+  }
+
+  .mobile-nav-content {
+    flex: 1;
+    padding: 0;
+
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      border-bottom: 1px solid $border-color;
+      background: linear-gradient(
+        135deg,
+        rgba($primary-color, 0.05) 0%,
+        rgba($primary-color, 0.1) 100%
+      );
+
+      .profile-icon-mobile {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: $white;
+        border: 2px solid $border-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+        color: #666;
+
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+
+    .nav-links {
+      padding: 20px 0;
+
+      a {
+        display: flex;
+        align-items: center;
+        padding: 16px 30px;
+        text-decoration: none;
+        color: $text-color;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+
+        &:hover {
+          background-color: rgba($primary-color, 0.05);
+          border-left-color: rgba($primary-color, 0.3);
+        }
+
+        &.active-link {
+          color: $primary-color;
+          background-color: rgba($primary-color, 0.1);
+          border-left-color: $primary-color;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .mobile-nav-footer {
+    padding: 20px;
+    border-top: 1px solid $border-color;
+
+    .logout-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background-color: rgba($logout-color, 0.1);
+      border: 1px solid rgba($logout-color, 0.3);
+      border-radius: 8px;
+      color: $logout-color;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      justify-content: center;
+
+      .logout-icon {
+        font-size: 18px;
+      }
+
+      &:hover {
+        background-color: rgba($logout-color, 0.2);
+        border-color: rgba($logout-color, 0.5);
+      }
+    }
+  }
+}
+
+// Media Queries
 @media (max-width: 768px) {
-  // ... on cache la navigation d'ordinateur
   .desktop-nav {
     display: none;
   }
 
-  // ... et on affiche le bouton hamburger
-  .hamburger-menu {
-    display: flex;
-  }
-
-  // Le menu mobile qui apparaît
+  .hamburger-menu,
   .mobile-nav {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: absolute;
-    top: 100%; // Juste en dessous du header
-    right: 0;
-    background-color: white;
-    width: 250px;
-    padding: 20px;
-    box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transform: translateX(100%); // Caché sur le côté
-    transition: transform 0.3s ease-in-out;
-
-    // Quand le menu est ouvert...
-    &.is-open {
-      transform: translateX(0); // ... il revient à sa place
-    }
-
-    a {
-      text-decoration: none;
-      color: $text-color;
-      font-size: 1.2rem;
-    }
-
-    .active-link {
-      color: $primary-color;
-      font-weight: bold;
-    }
   }
 
-  .profile-icon-mobile {
-    margin-top: 20px;
-    align-self: center;
-    // Tu peux reprendre les styles de .profile-icon si tu veux le même rendu
+  .header-container {
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-nav {
+    width: 100vw;
+  }
+
+  .header-container {
+    padding: 1rem;
   }
 }

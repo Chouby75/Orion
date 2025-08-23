@@ -1,48 +1,103 @@
+<!-- HTML Template -->
 <header class="header-container">
-  <a routerLink="/feed" class="logo"
-    ><img class="logo" src="/assets/logo_p6.png"
-  /></a>
+  <a routerLink="/main/feed" class="logo">
+    <img class="logo" src="/assets/logo_p6.png" alt="Logo" />
+  </a>
 
   <nav class="desktop-nav">
     <a
-      routerLink="/feed"
+      routerLink="/main/feed"
       routerLinkActive="active-link"
       [routerLinkActiveOptions]="{ exact: true }"
       (click)="goToFeed()"
       >Articles</a
     >
     <a
-      routerLink="/topic"
+      routerLink="/main/topics"
       routerLinkActive="active-link"
       [routerLinkActiveOptions]="{ exact: true }"
       (click)="goToTopics()"
       >Thèmes</a
     >
     <a class="logout-link" (click)="logout()">Se déconnecter</a>
-    <div class="profile-icon" (click)="goToProfile()">
-      <span>🧑‍🚀</span>
-    </div>
+    <button
+      class="profile-btn"
+      [class.active]="isProfileActive"
+      (click)="goToProfile()"
+    >
+      <div class="profile-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+          />
+        </svg>
+      </div>
+    </button>
   </nav>
 
-  <button class="hamburger-menu" (click)="toggleMenu()">
+  <button
+    class="hamburger-menu"
+    (click)="toggleMenu()"
+    [class.active]="isMenuOpen"
+  >
     <span></span>
     <span></span>
     <span></span>
   </button>
 
+  <!-- Overlay pour fermer le menu en cliquant à côté -->
+  <div
+    class="mobile-overlay"
+    [class.is-open]="isMenuOpen"
+    (click)="closeMenu()"
+  ></div>
+
+  <!-- Sidebar mobile -->
   <nav class="mobile-nav" [class.is-open]="isMenuOpen">
-    <a href="#" class="logout-link" (click)="closeMenu()">Se déconnecter</a>
-    <a
-      routerLink="/articles"
-      routerLinkActive="active-link"
-      (click)="closeMenu()"
-      >Articles</a
-    >
-    <a routerLink="/themes" routerLinkActive="active-link" (click)="closeMenu()"
-      >Thèmes</a
-    >
-    <div class="profile-icon-mobile">
-      <span>🧑‍🚀</span>
+    <div class="mobile-nav-header">
+      <button class="close-btn" (click)="closeMenu()">×</button>
+    </div>
+
+    <div class="mobile-nav-content">
+      <div class="profile-section">
+        <div class="profile-icon-mobile">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a
+          routerLink="main/feed"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="goToFeed()"
+          >Articles</a
+        >
+        <a
+          routerLink="main/topics"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="goToTopics()"
+          >Thèmes</a
+        >
+        <a
+          routerLink="/profile"
+          routerLinkActive="active-link"
+          (click)="goToProfile()"
+          >Profil</a
+        >
+      </div>
+    </div>
+
+    <div class="mobile-nav-footer">
+      <a class="logout-link" (click)="logout(); closeMenu()">
+        <span class="logout-icon">🚪</span>
+        Se déconnecter
+      </a>
     </div>
   </nav>
 </header>

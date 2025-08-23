@@ -7,7 +7,9 @@
         {{ topic.description }}
       </p>
       <button
-        class="create-article-btn"
+        class="{{
+          topic.isSubscribed ? 'already-subscribed-btn' : 'subscribe-btn'
+        }}"
         (click)="subscribe(topic.id)"
         [disabled]="topic.isSubscribed"
       >
