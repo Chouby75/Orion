@@ -24,6 +24,7 @@ import { PostFormComponent } from './components/post-form/post-form.component';
 import { TopicComponent } from './components/topic/topic.component';
 import { PostSpecComponent } from './components/post-spec/post-spec.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     TopicComponent,
     PostSpecComponent,
     UserProfileComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

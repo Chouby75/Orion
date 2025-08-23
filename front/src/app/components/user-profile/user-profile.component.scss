@@ -144,6 +144,10 @@ $shadow: 0 2px 8px rgba(72, 84, 159, 0.08);
       padding: 24px;
       transition: all 0.3s ease;
       text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
 
       &:hover {
         transform: translateY(-2px);
@@ -169,16 +173,14 @@ $shadow: 0 2px 8px rgba(72, 84, 159, 0.08);
         background-color: $primary-color;
         color: white;
         border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: 500;
-        font-size: 0.9rem;
+        border-radius: 8px; // Pour un bouton bien arrondi
+        padding: 12px 24px;
+        font-weight: bold;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: background-color 0.3s ease;
 
         &:hover {
           background-color: $primary-color-light;
-          transform: translateY(-1px);
         }
       }
     }

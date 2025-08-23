@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FeedService } from '../../services/feed.service'; // Adapte le chemin vers ton service
 import { TopicService } from 'src/app/services/topic.service';
 import { Topic } from 'src/app/models/topic';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post-form',
   templateUrl: './post-form.component.html',
   styleUrls: ['./post-form.component.scss'],
 })
-export class PostFormComponent implements OnInit {
+export class PostFormComponent implements OnInit, OnDestroy {
   public postForm: FormGroup;
   public themes: Topic[] = [];
+  private postFlux?: Subscription;
+  private topicsFlux?: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -28,7 +31,7 @@ export class PostFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.topicService.getTopics().subscribe(
+    this.topicsFlux = this.topicService.getTopics().subscribe(
       (data) => {
         this.themes = data;
       },
@@ -36,6 +39,11 @@ export class PostFormComponent implements OnInit {
         console.error('Erreur lors de la récupération des thèmes:', error);
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.postFlux?.unsubscribe();
+    this.topicsFlux?.unsubscribe();
   }
 
   onTopicChange(event: any, topicName: string) {
@@ -68,7 +76,7 @@ export class PostFormComponent implements OnInit {
 
       console.log("Données envoyées à l'API :", postData);
 
-      this.articleService.createPost(postData).subscribe(
+      this.postFlux = this.articleService.createPost(postData).subscribe(
         (response) => {
           this.router.navigate(['main/feed']); // Changez pour votre route correcte
         },

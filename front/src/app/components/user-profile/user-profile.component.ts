@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 // IMPORTE TON SERVICE (ajuste le chemin selon ta structure)
 import { AccountService } from '../../services/account.service';
@@ -7,13 +7,14 @@ import { Profile } from '../../models/profile';
 import { Topic } from '../../models/topic';
 import { TopicService } from '../../services/topic.service';
 import { ProfileUpdate } from '../../models/profile';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent implements OnInit, OnDestroy {
   public userProfile: Profile = {
     id: 0,
     username: '',
@@ -39,6 +40,9 @@ export class UserProfileComponent implements OnInit {
   public subscribedTopics: Topic[] = [];
   public isLoading: boolean = false;
   public errorMessage: string = '';
+  private fluxProfile?: Subscription;
+  private unsubFlux?: Subscription;
+  private updateFlux?: Subscription;
 
   constructor(
     private userService: AccountService,
@@ -50,12 +54,18 @@ export class UserProfileComponent implements OnInit {
     this.loadUserProfile();
   }
 
+  ngOnDestroy(): void {
+    this.fluxProfile?.unsubscribe();
+    this.unsubFlux?.unsubscribe();
+    this.updateFlux?.unsubscribe();
+  }
+
   /**
    * Charge les informations du profil utilisateur actuel
    */
   loadUserProfile(): void {
     this.isLoading = true;
-    this.userService.getUserProfile().subscribe(
+    this.fluxProfile = this.userService.getUserProfile().subscribe(
       (data: Profile) => {
         this.userProfile = {
           id: data.id,
@@ -85,7 +95,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   unsubscribe(topicId: number): void {
-    this.topicService.unsubscribeFromTopic(topicId).subscribe(
+    this.unsubFlux = this.topicService.unsubscribeFromTopic(topicId).subscribe(
       (response) => {
         this.ngOnInit();
       },
@@ -112,21 +122,23 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    this.userService.updateUserProfile(profileUpdate).subscribe(
-      (response) => {
-        console.log('Profil mis à jour avec succès:', response);
-        this.isLoading = false;
-        // Recharger le profil pour avoir les données à jour
-        this.loadUserProfile();
-        // Réinitialiser le champ mot de passe
-        this.formData.password = '';
-      },
-      (error) => {
-        console.error('Erreur lors de la mise à jour du profil:', error);
-        this.errorMessage = 'Erreur lors de la mise à jour du profil';
-        this.isLoading = false;
-      }
-    );
+    this.updateFlux = this.userService
+      .updateUserProfile(profileUpdate)
+      .subscribe(
+        (response) => {
+          console.log('Profil mis à jour avec succès:', response);
+          this.isLoading = false;
+          // Recharger le profil pour avoir les données à jour
+          this.loadUserProfile();
+          // Réinitialiser le champ mot de passe
+          this.formData.password = '';
+        },
+        (error) => {
+          console.error('Erreur lors de la mise à jour du profil:', error);
+          this.errorMessage = 'Erreur lors de la mise à jour du profil';
+          this.isLoading = false;
+        }
+      );
   }
 
   /**

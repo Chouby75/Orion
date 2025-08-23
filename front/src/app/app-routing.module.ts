@@ -9,6 +9,7 @@ import { PostFormComponent } from './components/post-form/post-form.component';
 import { TopicComponent } from './components/topic/topic.component';
 import { PostSpecComponent } from './components/post-spec/post-spec.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 // consider a guard combined with canLoad / canActivate route option
 // to manage unauthenticated user to access private routes
@@ -27,6 +28,7 @@ const routes: Routes = [
       { path: 'profile', component: UserProfileComponent },
     ],
   },
+  { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({

@@ -11,6 +11,19 @@
       <h1 class="page-title">S'inscrire</h1>
     </div>
 
+    <!-- Message d'erreur de connexion -->
+    <mat-error *ngIf="loginError" class="login-error-message">
+      <mat-icon>error</mat-icon>
+      {{ loginError }}
+      <button
+        mat-icon-button
+        (click)="clearLoginError()"
+        class="close-error-btn"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-error>
+
     <form
       [formGroup]="RegisterForm"
       (ngSubmit)="onSubmit()"
@@ -40,6 +53,11 @@
       <mat-form-field appearance="outline">
         <mat-label>Mot de passe</mat-label>
         <input matInput type="password" required formControlName="password" />
+        <mat-error *ngIf="getPasswordErrorMessage().length > 0">
+          <div *ngFor="let error of getPasswordErrorMessage()">
+            {{ error }}
+          </div>
+        </mat-error>
       </mat-form-field>
 
       <button mat-raised-button class="register-button" type="submit">

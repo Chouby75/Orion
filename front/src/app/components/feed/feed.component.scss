@@ -2,8 +2,8 @@
 $primary-color: #7c5dfa;
 $primary-color-light: #9277ff;
 $secondary-color: #fd5c63;
-$card-bg: #ffffff;
-$page-bg: #f8f9fa;
+$card-bg: #f5f5f5;
+$page-bg: #ffffff;
 $text-color: #0c0e16;
 $text-light: #7e88c3;
 $border-color: #e0e4e9;
@@ -15,7 +15,6 @@ $subscribed-color: #94a3b8;
 .feed-container {
   min-height: 100vh;
   background-color: $page-bg;
-  font-family: "League Spartan", sans-serif;
   padding: 40px 20px;
 }
 

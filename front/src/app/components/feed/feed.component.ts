@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FeedService } from '../../services/feed.service';
 import { PostSummary } from '../../models/post';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.scss'],
 })
-export class FeedComponent implements OnInit {
+export class FeedComponent implements OnInit, OnDestroy {
   public articles: PostSummary[] = [];
-  public sortDirection: 'desc' | 'asc' = 'desc'; // 'desc' = plus récent au plus ancien, 'asc' = plus ancien au plus récent
+  public sortDirection: 'desc' | 'asc' = 'desc';
+  private feed?: Subscription;
 
   constructor(private articleService: FeedService, private router: Router) {}
 
@@ -18,8 +20,12 @@ export class FeedComponent implements OnInit {
     this.loadArticles();
   }
 
+  ngOnDestroy(): void {
+    this.feed?.unsubscribe();
+  }
+
   private loadArticles(): void {
-    this.articleService.getPosts().subscribe(
+    this.feed = this.articleService.getPosts().subscribe(
       (data: PostSummary[]) => {
         this.articles = data;
         this.sortArticles();

@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FeedService } from 'src/app/services/feed.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post-spec',
   templateUrl: './post-spec.component.html',
   styleUrls: ['./post-spec.component.scss'],
 })
-export class PostSpecComponent implements OnInit {
+export class PostSpecComponent implements OnInit, OnDestroy {
   public article: any = {};
   public commentForm: FormGroup;
   public isSubmitting = false;
+  private postFlux?: Subscription;
+  private commentFlux?: Subscription;
 
   constructor(
     private articleService: FeedService,
@@ -35,8 +38,13 @@ export class PostSpecComponent implements OnInit {
     this.loadArticle(articleId);
   }
 
+  ngOnDestroy(): void {
+    this.postFlux?.unsubscribe();
+    this.commentFlux?.unsubscribe();
+  }
+
   loadArticle(articleId: string): void {
-    this.articleService.getPostById(articleId).subscribe(
+    this.postFlux = this.articleService.getPostById(articleId).subscribe(
       (data) => {
         this.article = data;
       },
@@ -59,18 +67,20 @@ export class PostSpecComponent implements OnInit {
         return;
       }
 
-      this.articleService.commentOnPost(postId, content).subscribe(
-        (response) => {
-          this.loadArticle(articleId!);
-          // Réinitialiser le formulaire
-          this.commentForm.reset();
-          this.isSubmitting = false;
-        },
-        (error) => {
-          console.error('Erreur lors de la création du commentaire:', error);
-          this.isSubmitting = false;
-        }
-      );
+      this.commentFlux = this.articleService
+        .commentOnPost(postId, content)
+        .subscribe(
+          (response) => {
+            this.loadArticle(articleId!);
+            // Réinitialiser le formulaire
+            this.commentForm.reset();
+            this.isSubmitting = false;
+          },
+          (error) => {
+            console.error('Erreur lors de la création du commentaire:', error);
+            this.isSubmitting = false;
+          }
+        );
     }
   }
 

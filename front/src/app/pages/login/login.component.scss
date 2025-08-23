@@ -68,3 +68,49 @@
   margin: auto;
   border-radius: 12px;
 }
+
+/* --- Style pour le message d'erreur --- */
+
+.login-error-message {
+  /* On le transforme en boîte flexible pour bien aligner les éléments */
+  display: flex;
+  align-items: center; /* Centre verticalement l'icône, le texte et le bouton */
+
+  /* On lui donne la même largeur que le formulaire pour la cohérence */
+  width: 100%;
+  max-width: 500px;
+
+  /* Un peu d'air à l'intérieur et à l'extérieur */
+  padding: 12px 16px;
+  margin-bottom: 20px; /* Espace avant le début du formulaire */
+
+  /* Le look "erreur" classique */
+  background-color: #f8d7da; /* Un rouge très clair */
+  color: #721c24; /* Un rouge foncé pour le texte */
+  border: 1px solid #f5c6cb; /* Une bordure rouge clair */
+  border-radius: 8px; /* Bords arrondis pour adoucir */
+
+  /* Pour que le texte soit un peu plus visible */
+  font-weight: 500;
+}
+
+/* On s'assure que l'icône d'erreur a la bonne couleur */
+.login-error-message mat-icon {
+  color: #721c24;
+  margin-right: 10px; /* Petit espace entre l'icône et le texte */
+}
+
+/* Style pour le bouton de fermeture */
+.close-error-btn {
+  /* La magie pour pousser le bouton tout à droite */
+  margin-left: auto;
+
+  /* On enlève la marge par défaut pour un meilleur alignement */
+  padding: 0;
+  min-width: auto;
+}
+
+/* On s'assure que l'icône de fermeture est aussi de la bonne couleur */
+.close-error-btn mat-icon {
+  color: #721c24;
+}

@@ -26,6 +26,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   RegisterForm!: FormGroup;
   register?: Subscription;
+  loginError: string = '';
 
   ngOnInit(): void {
     this.RegisterForm = this.fb.group({
@@ -90,6 +91,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error('Register failed', error);
+          console.error('Login failed', error);
+
+          // Gestion des différents types d'erreurs
+          if (error?.error?.token) {
+            this.loginError = error.error.token;
+          } else if (error?.error?.message) {
+            this.loginError = error.error.message;
+          } else if (error?.message) {
+            this.loginError = error.message;
+          } else {
+            this.loginError =
+              'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
+          }
         }
       );
     } else {
@@ -135,6 +149,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
 
     return errors;
+  }
+
+  // Méthode pour effacer le message d'erreur de connexion
+  clearLoginError(): void {
+    this.loginError = '';
   }
 
   ngOnDestroy(): void {
