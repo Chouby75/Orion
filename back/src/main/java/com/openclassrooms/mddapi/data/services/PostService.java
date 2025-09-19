@@ -59,8 +59,7 @@ public class PostService {
     }
 
     public List<PostSummarizeDto> getFeed() {
-        return StreamSupport.stream(postRepo.findAll().spliterator(), false)
-                .sorted((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()))
+        return postRepo.findAllOrderByCreatedAtDesc().stream()
                 .map(PostMapper::mapToPostSummarizeDto)
                 .collect(Collectors.toList());
     }
