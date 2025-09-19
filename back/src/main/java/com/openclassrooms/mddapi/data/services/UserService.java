@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.data.entity.UserEntity;
 import com.openclassrooms.mddapi.dto.tokenDto;
 import com.openclassrooms.mddapi.dto.UserInputDto;
-import com.openclassrooms.mddapi.data.repo.UserRepo;
+import com.openclassrooms.mddapi.data.repo.UserRepository;
 
 import java.util.Optional;
 
@@ -14,10 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 public class UserService {
 
-    private final UserRepo userRepository; // Assume UserRepository is defined elsewhere
+    private final UserRepository userRepository; // Assume UserRepository is defined elsewhere
     private final PasswordEncoder passwordEncoder; // Assume PasswordEncoder is defined elsewhere
 
-    public UserService(UserRepo userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }

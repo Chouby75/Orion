@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PostRepo extends CrudRepository<PostEntity, Long> {
+public interface PostRepository extends CrudRepository<PostEntity, Long> {
     Optional<PostEntity> findByTitle(String title);
 
     Optional<PostEntity> findByContent(String content);

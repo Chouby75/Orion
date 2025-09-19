@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CommentRepo extends CrudRepository<CommentEntity, Long> {
+public interface CommentRepository extends CrudRepository<CommentEntity, Long> {
     Optional<CommentEntity> findByContent(String content);
 }

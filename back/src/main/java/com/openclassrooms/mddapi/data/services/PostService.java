@@ -1,7 +1,7 @@
 package com.openclassrooms.mddapi.data.services;
 
 import org.springframework.stereotype.Service;
-import com.openclassrooms.mddapi.data.repo.PostRepo;
+import com.openclassrooms.mddapi.data.repo.PostRepository;
 import com.openclassrooms.mddapi.data.entity.CommentEntity;
 import com.openclassrooms.mddapi.data.entity.PostEntity;
 import com.openclassrooms.mddapi.data.entity.TopicsEntity;
@@ -11,7 +11,7 @@ import com.openclassrooms.mddapi.dto.PostSummarizeDto;
 import com.openclassrooms.mddapi.dto.TopicsSummarizeDto;
 import com.openclassrooms.mddapi.mappers.PostMapper;
 import java.util.stream.Collectors;
-import com.openclassrooms.mddapi.data.repo.TopicsRepo;
+import com.openclassrooms.mddapi.data.repo.TopicsRepository;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
@@ -20,11 +20,11 @@ import java.util.Optional;
 @Service
 public class PostService {
 
-    private final PostRepo postRepo;
+    private final PostRepository postRepo;
 
-    private final TopicsRepo topicsRepo;
+    private final TopicsRepository topicsRepo;
 
-    public PostService(PostRepo postRepo, TopicsRepo topicsRepo) {
+    public PostService(PostRepository postRepo, TopicsRepository topicsRepo) {
         this.postRepo = postRepo;
         this.topicsRepo = topicsRepo;
     }

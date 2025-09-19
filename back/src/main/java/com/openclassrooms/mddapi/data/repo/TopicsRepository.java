@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface TopicsRepo extends CrudRepository<TopicsEntity, Long> {
+public interface TopicsRepository extends CrudRepository<TopicsEntity, Long> {
     Optional<TopicsEntity> findByName(String name);
 
     Optional<TopicsEntity> findById(Long id);

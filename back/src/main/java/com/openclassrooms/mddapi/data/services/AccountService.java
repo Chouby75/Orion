@@ -2,7 +2,7 @@ package com.openclassrooms.mddapi.data.services;
 
 import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.data.entity.UserEntity;
-import com.openclassrooms.mddapi.data.repo.UserRepo;
+import com.openclassrooms.mddapi.data.repo.UserRepository;
 
 import java.util.stream.Collectors;
 
@@ -20,10 +20,10 @@ import com.openclassrooms.mddapi.dto.TopicsDto;
 @Service
 public class AccountService {
 
-    private final UserRepo userRepo;
+    private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
-    public AccountService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
+    public AccountService(UserRepository userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }

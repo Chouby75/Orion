@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.openclassrooms.mddapi.data.entity.UserEntity;
-import com.openclassrooms.mddapi.data.repo.UserRepo;
+import com.openclassrooms.mddapi.data.repo.UserRepository;
 import com.openclassrooms.mddapi.data.services.TopicService;
 import com.openclassrooms.mddapi.dto.MessageToReturn;
 import com.openclassrooms.mddapi.dto.TopicsDto;
@@ -23,9 +23,9 @@ public class TopicsController {
 
     private final TopicService topicService;
 
-    private final UserRepo userRepo;
+    private final UserRepository userRepo;
 
-    public TopicsController(TopicService topicService, UserRepo userRepo) {
+    public TopicsController(TopicService topicService, UserRepository userRepo) {
         this.topicService = topicService;
         this.userRepo = userRepo;
     }
