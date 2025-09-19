@@ -11,7 +11,6 @@ import com.openclassrooms.mddapi.dto.PostSummarizeDto;
 import com.openclassrooms.mddapi.dto.TopicsSummarizeDto;
 import com.openclassrooms.mddapi.mappers.PostMapper;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import com.openclassrooms.mddapi.data.repo.TopicsRepo;
 import java.util.Set;
 import java.util.HashSet;

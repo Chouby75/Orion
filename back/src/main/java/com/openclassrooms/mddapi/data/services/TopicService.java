@@ -1,26 +1,22 @@
 package com.openclassrooms.mddapi.data.services;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mddapi.data.entity.TopicsEntity;
 import com.openclassrooms.mddapi.data.entity.UserEntity;
-import com.openclassrooms.mddapi.data.repo.TopicsRepo;
-import com.openclassrooms.mddapi.data.repo.UserRepo;
+import com.openclassrooms.mddapi.data.repo.TopicsRepository;
+import com.openclassrooms.mddapi.data.repo.UserRepository;
 import com.openclassrooms.mddapi.dto.TopicsDto;
-import com.openclassrooms.mddapi.mappers.TopicsMapper;
 
 @Service
 public class TopicService {
 
-    private final TopicsRepo topicsRepo;
-    private final UserRepo userRepo;
+    private final TopicsRepository topicsRepo;
+    private final UserRepository userRepo;
 
-    public TopicService(TopicsRepo topicsRepo, UserRepo userRepo) {
+    public TopicService(TopicsRepository topicsRepo, UserRepository userRepo) {
         this.topicsRepo = topicsRepo;
         this.userRepo = userRepo;
     }
