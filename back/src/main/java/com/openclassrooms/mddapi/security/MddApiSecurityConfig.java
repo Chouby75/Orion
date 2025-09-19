@@ -1,6 +1,8 @@
 package com.openclassrooms.mddapi.security;
+
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,7 +23,8 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 @EnableWebSecurity
 public class MddApiSecurityConfig {
 
-    private String jwtKey = "TRES_LONGUE_CLE_SECRETE_POUR_TEST_NE_PAS_UTILISER_EN_PROD_123456789";
+	@Value("${jwt.secret}")
+	private String jwtKey;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,17 +33,18 @@ public class MddApiSecurityConfig {
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
-					.antMatchers("/auth/**").permitAll()
-					.anyRequest().authenticated())
+						.antMatchers("/auth/**").permitAll()
+						.anyRequest().authenticated())
 				.oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
 				.httpBasic(Customizer.withDefaults()).build();
-				
+
 	}
 
 	@Bean
 	public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
 		org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
-		configuration.setAllowedOrigins(java.util.List.of("http://localhost:4200", "https://your-production-domain.com"));
+		configuration
+				.setAllowedOrigins(java.util.List.of("http://localhost:4200", "https://your-production-domain.com"));
 		configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(java.util.List.of("*"));
 		configuration.setAllowCredentials(true);
