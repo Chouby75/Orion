@@ -25,28 +25,9 @@ public class TopicService {
         this.userRepo = userRepo;
     }
 
-    public Set<TopicsDto> getTopics(UserEntity user) {
-
-        Iterable<TopicsEntity> topicsEntities = topicsRepo.findAll();
-
-        Set<TopicsEntity> topicsSet = new HashSet<>();
-        topicsEntities.forEach(topicsSet::add);
-        Set<TopicsDto> topicsDto = topicsSet.stream()
-                .map(TopicsMapper::mapToDto)
-                .collect(Collectors.toSet());
-
-        Set<Long> subscribedTopicIds = user.getSubscriptions().stream()
-                .map(TopicsEntity::getId)
-                .collect(Collectors.toSet());
-
-        topicsDto.forEach(dto -> {
-            dto.setIsSubscribed(subscribedTopicIds.contains(dto.getId()));
-        });
-
-        return topicsDto.stream()
-            .sorted((t1, t2) -> t1.getId().compareTo(t2.getId()))
-            .collect(Collectors.toCollection(LinkedHashSet::new));
-    }
+     public Set<TopicsDto> getTopics(UserEntity user) {
+     return topicsRepo.findAllWithSubscriptionStatus(user.getId());
+ }
 
     public Boolean subscribeToTopic(Long topicId, Long userId) {
         TopicsEntity topic = topicsRepo.findById(topicId)
